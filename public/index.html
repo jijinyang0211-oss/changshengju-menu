@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>长生居 · 私房菜</title>
+    <link rel="preload" href="fonts/ma-shan-zheng.woff2" as="font" type="font/woff2" crossorigin>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&display=swap');
         @font-face {
@@ -236,14 +237,14 @@
             align-items: center;
             gap: 14px;
             margin: 34px 0 22px;
+            padding: 12px 0;
             position: sticky;
             top: 0;
             z-index: 130;
         }
 
-        /* 吸顶固定：压掉外边距，加底衬背景，避免菜品从标题后透出 */
+        /* 吸顶固定：仅加背景与左右内边距，保持与流内状态同高，切换不跳动 */
         .section-title.pin {
-            margin: 0;
             padding: 12px 16px;
             background: linear-gradient(180deg, rgba(18, 12, 6, .97) 0%, rgba(18, 12, 6, .93) 100%);
             backdrop-filter: blur(8px);
@@ -1865,6 +1866,10 @@
                 padding: 0;
                 padding-bottom: var(--kb-h, 0px);
             }
+            /* 菜品详情弹窗稍微上移，避免紧贴屏幕底部 */
+            #detailModal {
+                padding-bottom: calc(7vh + var(--kb-h, 0px));
+            }
             .modal {
                 max-height: calc(88vh - var(--kb-h, 0px));
                 width: 100%;
@@ -2066,7 +2071,7 @@
         }
 
         /* 毛笔字招牌（深色底衬提升对比，不裁字）
-           字体加载完成前保持透明，加载完成再淡入，避免从普通字体突变成毛笔字 */
+           文案与「推门而入」按钮同步展示，字体已子集化预加载，加载极快 */
         .gt-callig {
             text-align: center;
             font-family: 'MaShanZheng', 'STKaiti', 'KaiTi', serif;
@@ -2083,12 +2088,8 @@
                 0 0 10px rgba(242, 220, 164, .75),
                 0 0 30px rgba(242, 220, 164, .35),
                 0 4px 8px rgba(0, 0, 0, .85);
-            opacity: 0;
-            transition: opacity .8s ease;
-            will-change: opacity, transform;
-        }
-        .gate-intro.fonts-ready .gt-callig {
             opacity: 1;
+            will-change: opacity, transform;
             animation: calligIdle 4s ease-in-out 1.5s infinite;
         }
         @keyframes calligIdle {
@@ -2114,10 +2115,6 @@
                 0 0 20px rgba(20, 12, 4, .7),
                 0 0 26px rgba(212, 169, 79, .55),
                 0 2px 4px rgba(0, 0, 0, .9);
-            opacity: 0;
-            transition: opacity .8s ease .1s;
-        }
-        .gate-intro.fonts-ready .gt-sub {
             opacity: 1;
             animation: subIdle 4s ease-in-out 1.8s infinite;
         }
@@ -3237,17 +3234,10 @@
         const mainContent = document.getElementById('mainContent');
         let gateOpened = false;
 
-        // 毛笔字体加载完成后再显示开场品牌文案，避免字体突变
-        (function readyFonts() {
-            const show = () => gateIntro && gateIntro.classList.add('fonts-ready');
-            if (!document.fonts || !document.fonts.load) { show(); return; }
-            Promise.all([
-                document.fonts.load('56px "MaShanZheng"'),
-                document.fonts.load('24px "MaShanZheng"')
-            ]).then(() => Promise.resolve(document.fonts.ready)).then(show).catch(show);
-            // 兜底：字体加载过慢时也显示文案，避免开场一直空白
-            setTimeout(show, 4000);
-        })();
+        // 提前请求毛笔字体，确保开场文案与按钮同步展示时即为毛笔字
+        if (document.fonts && document.fonts.load) {
+            document.fonts.load('24px "MaShanZheng"');
+        }
 
         function openGate() {
             if (gateOpened) return;
