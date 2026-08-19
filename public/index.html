@@ -282,24 +282,19 @@
             position: sticky;
             top: var(--title-h, 84px);
             margin-top: 0;
-            transition: height .3s ease;
         }
 
-        /* 吸顶固定后：标题下方占满到购物车上方，菜单内部滚动 */
+        /* 吸顶固定后：标题下方占满到购物车上方，菜单内部滚动；不设纯色背景，透出页面渐变避免色差 */
         .layout.pinned {
             height: calc(100vh - var(--title-h, 84px) - var(--cart-h, 85px));
             height: calc(100dvh - var(--title-h, 84px) - var(--cart-h, 85px));
             overflow: hidden;
-            /* 固定背景：滚动时菜单区颜色恒定，不随页面背景渐变变化 */
-            background: var(--bg);
         }
         .layout.pinned .main-area {
             height: 100%;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
-            background: var(--bg);
-            /* 不设 contain：菜品区滚到底/顶后可自然过渡到页面滚动，避免卡死 */
         }
         .layout.pinned .sidebar {
             height: 100%;
@@ -3166,15 +3161,18 @@
         function applyPinned(pinned) {
             const isPinned = layoutEl.classList.contains('pinned');
             if (pinned === isPinned) return;
-            layoutEl.classList.toggle('pinned', pinned);
-            titleEl.classList.toggle('pin', pinned);
             if (pinned) {
+                // 切换前记录自然高度，吸顶锁高后撑回该高度，避免页面总高骤减造成跳动
+                const naturalH = containerEl.scrollHeight;
                 syncStickyMetrics();
-                // 撑高容器：保证标题与菜单有足够滚动空间维持吸顶，避免吸顶提前失效
+                layoutEl.classList.add('pinned');
+                titleEl.classList.add('pin');
                 const cTopDoc = containerEl.getBoundingClientRect().top + window.scrollY;
                 const need = window.scrollY + window.innerHeight - cTopDoc;
-                containerEl.style.minHeight = Math.max(containerEl.scrollHeight, need) + 'px';
+                containerEl.style.minHeight = Math.max(naturalH, need) + 'px';
             } else {
+                layoutEl.classList.remove('pinned');
+                titleEl.classList.remove('pin');
                 containerEl.style.minHeight = '';
             }
         }
