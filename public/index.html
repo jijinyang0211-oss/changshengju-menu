@@ -670,6 +670,7 @@
             max-width: 520px;
             max-height: 90vh;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
             overscroll-behavior: contain;
             box-shadow: 0 30px 70px rgba(0, 0, 0, .7), inset 0 0 40px rgba(212, 169, 79, .05);
         }
@@ -1043,6 +1044,7 @@
         .summary-list {
             max-height: 250px;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .summary-row {
@@ -1819,12 +1821,7 @@
                 padding: 16px 34px;
             }
 
-            /* 移动端弹层顶部对齐，内容可完整滚动，不顶格 */
-            .modal-overlay {
-                align-items: flex-start;
-                padding-top: 5vh;
-                padding-bottom: 24px;
-            }
+            /* 移动端弹窗限制高度，内容可完整滚动 */
             .modal {
                 max-height: 88vh;
             }
