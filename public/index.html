@@ -266,9 +266,23 @@
             align-items: stretch;
             position: sticky;
             top: 0;
+        }
+
+        /* 吸顶固定后：菜单区占视口高度，菜品内部滚动 */
+        .layout.pinned {
             height: calc(100vh - 76px);
             height: calc(100dvh - 76px);
             overflow: hidden;
+        }
+        .layout.pinned .main-area {
+            height: 100%;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .layout.pinned .sidebar {
+            height: 100%;
+            overflow-y: auto;
         }
 
         /* ---- 侧边栏 ---- */
@@ -429,10 +443,6 @@
         .main-area {
             flex: 1;
             min-width: 0;
-            height: 100%;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
         }
         .main-area::-webkit-scrollbar { display: none; }
 
@@ -3115,6 +3125,16 @@
 
         createDust();
         loadMenu();
+
+        // ===== 菜单区吸顶固定：滚到今日菜单才切换内部滚动 =====
+        const layoutEl = document.querySelector('.layout');
+        function onScrollPin() {
+            if (!layoutEl) return;
+            const pinned = window.scrollY >= layoutEl.offsetTop - 8;
+            layoutEl.classList.toggle('pinned', pinned);
+        }
+        window.addEventListener('scroll', onScrollPin, { passive: true });
+        onScrollPin();
 
         // ===== 开门动画 =====
         const gateIntro = document.getElementById('gateIntro');
