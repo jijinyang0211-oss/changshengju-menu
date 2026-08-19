@@ -1,17 +1,31 @@
 #!/bin/bash
-# 长生居·私房菜 一键部署脚本（Ubuntu 22.04）
+# 长生居·私房菜 一键部署脚本（支持 Ubuntu / Debian / CentOS / Alibaba Cloud Linux）
 # 用法: bash server-deploy.sh
 set -e
 
-echo "==> 1/5 更新系统并安装基础工具"
-export DEBIAN_FRONTEND=noninteractive
-apt-get update -y
-apt-get install -y curl git
+echo "==> 1/5 检测系统并安装基础工具"
+# 检测包管理器
+if command -v apt-get >/dev/null 2>&1; then
+  PKG="apt-get"
+  export DEBIAN_FRONTEND=noninteractive
+  $PKG update -y
+  $PKG install -y curl git
+  NODE_SETUP="https://deb.nodesource.com/setup_20.x"
+elif command -v dnf >/dev/null 2>&1; then
+  PKG="dnf"
+  $PKG install -y curl git
+  NODE_SETUP="https://rpm.nodesource.com/setup_20.x"
+else
+  PKG="yum"
+  $PKG install -y curl git
+  NODE_SETUP="https://rpm.nodesource.com/setup_20.x"
+fi
+echo "   包管理器: $PKG"
 
 echo "==> 2/5 安装 Node.js 20"
 if ! command -v node >/dev/null 2>&1; then
-  curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-  apt-get install -y nodejs
+  curl -fsSL "$NODE_SETUP" | bash -
+  $PKG install -y nodejs
 fi
 node -v
 
@@ -31,7 +45,8 @@ pm2 startup systemd -u root --hp /root 2>/dev/null | tail -1 || true
 echo "==> 5/5 完成"
 echo ""
 echo "================================================"
-echo " 部署完成！网站地址: http://$(hostname -I | awk '{print $1}'):3000"
-echo " 管理后台: http://$(hostname -I | awk '{print $1}'):3000/admin"
+PUBLIC_IP=$(curl -s --connect-timeout 5 ifconfig.me || echo "你的公网IP")
+echo " 部署完成！网站地址: http://${PUBLIC_IP}:3000"
+echo " 管理后台: http://${PUBLIC_IP}:3000/admin"
 echo "================================================"
 echo " 注意：如果打不开，请到云控制台安全组放行 3000 端口"
