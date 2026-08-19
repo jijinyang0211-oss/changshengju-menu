@@ -3183,6 +3183,8 @@
             }, 900);
             setTimeout(() => {
                 gateIntro.style.display = 'none';
+                // 确保 transform 归零：fixed 弹窗才能以视口为定位容器
+                mainContent.style.transform = 'none';
             }, 1600);
         }
 
