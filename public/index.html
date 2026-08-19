@@ -641,11 +641,15 @@
             justify-content: center;
             z-index: 200;
             padding: 16px;
+            overscroll-behavior: contain;
         }
 
         .modal-overlay.show {
             display: flex;
         }
+
+        /* 弹层打开时锁定页面滚动，防止滚动穿透 */
+        body:has(.modal-overlay.show) { overflow: hidden; }
 
         .modal-overlay.show .modal {
             animation: popIn .32s cubic-bezier(.22, 1.2, .36, 1) both;
@@ -666,6 +670,7 @@
             max-width: 520px;
             max-height: 90vh;
             overflow-y: auto;
+            overscroll-behavior: contain;
             box-shadow: 0 30px 70px rgba(0, 0, 0, .7), inset 0 0 40px rgba(212, 169, 79, .05);
         }
 
@@ -1813,6 +1818,16 @@
             .banner-cap {
                 padding: 16px 34px;
             }
+
+            /* 移动端弹层顶部对齐，内容可完整滚动，不顶格 */
+            .modal-overlay {
+                align-items: flex-start;
+                padding-top: 5vh;
+                padding-bottom: 24px;
+            }
+            .modal {
+                max-height: 88vh;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1992,7 +2007,7 @@
         .gt-brand {
             position: absolute;
             left: 50%;
-            top: 50%;
+            top: 44%;
             transform: translate(-50%, -50%);
             z-index: 7;
             display: flex;
@@ -2350,7 +2365,7 @@
             </div>
             <div class="modal-buttons">
                 <button class="modal-btn btn-cancel" id="cancelBtn">再想想</button>
-                <button class="modal-btn btn-confirm" id="confirmBtn">下一步：确认订单</button>
+                <button class="modal-btn btn-confirm" id="confirmBtn">确认订单</button>
             </div>
         </div>
     </div>
