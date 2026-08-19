@@ -1,0 +1,1119 @@
+{
+  "menu": [
+    {
+      "id": 30,
+      "name": "盘型黄瓜",
+      "category": "冷菜",
+      "description": "黄瓜切连刀片盘绕成型，刀工细腻，造型雅致，清爽开胃",
+      "tags": [
+        "刀工",
+        "清爽"
+      ],
+      "image": "panxinghuanggua.jpg",
+      "ingredients": [
+        "黄瓜2根",
+        "盐、香油少许"
+      ],
+      "subCategory": "冷菜"
+    },
+    {
+      "id": 31,
+      "name": "桥型冷盘",
+      "category": "冷菜",
+      "description": "冷菜切片搭成拱桥造型，刀工整齐，层次分明，宴客头盘",
+      "tags": [
+        "造型",
+        "宴客"
+      ],
+      "image": "qiaoxinglengpan.jpg",
+      "ingredients": [
+        "黄瓜1根",
+        "火腿100克",
+        "蛋皮2张",
+        "胡萝卜半根"
+      ],
+      "subCategory": "冷菜"
+    },
+    {
+      "id": 32,
+      "name": "双拼冷盘",
+      "category": "冷菜",
+      "description": "两色冷菜对称拼摆，色彩相映，刀工考究，开胃前菜",
+      "tags": [
+        "造型",
+        "开胃"
+      ],
+      "image": "shuangpinlengpan.jpg",
+      "ingredients": [
+        "咸鸡半只",
+        "鸡脯肉100克",
+        "黄瓜1根",
+        "胡萝卜半根"
+      ],
+      "subCategory": "冷菜"
+    },
+    {
+      "id": 44,
+      "name": "随机下酒菜",
+      "category": "冷菜",
+      "subCategory": "冷菜",
+      "description": "当日主厨随缘小炒，下酒绝配，敬请期待",
+      "tags": [
+        "下酒"
+      ],
+      "image": "",
+      "ingredients": [
+        "当日主厨搭配，随机而定"
+      ]
+    },
+    {
+      "id": 17,
+      "name": "宫保鸡丁",
+      "category": "炒菜",
+      "description": "鸡丁滑嫩，花生酥脆，荔枝口酸甜微辣，川味经典",
+      "tags": [
+        "川菜",
+        "经典"
+      ],
+      "image": "gongbaojiding.jpg",
+      "ingredients": [
+        "鸡脯肉2块",
+        "鸡蛋1只",
+        "青萝卜1根（8两-1斤）",
+        "大红肠（10cm）1段",
+        "花生米、干辣椒"
+      ],
+      "subCategory": "鸡"
+    },
+    {
+      "id": 6,
+      "name": "酱爆鸡丁",
+      "category": "炒菜",
+      "description": "鸡丁滑嫩，黄酱爆炒，咸甜适口，京味经典",
+      "tags": [
+        "酱香",
+        "经典"
+      ],
+      "image": "jiangbaojiding.jpg",
+      "ingredients": [
+        "鸡脯肉2块",
+        "鸡蛋1只",
+        "黄瓜1根",
+        "甜面酱、料酒"
+      ],
+      "subCategory": "鸡"
+    },
+    {
+      "id": 35,
+      "name": "可乐话梅鸡翅",
+      "category": "炒菜",
+      "subCategory": "鸡",
+      "description": "可乐话梅焖煮鸡翅，咸甜微酸，色泽红亮",
+      "tags": [
+        "酸甜"
+      ],
+      "image": "kelehuanmeijichi.jpg",
+      "ingredients": [
+        "鸡翅8只",
+        "可乐1罐",
+        "话梅6颗",
+        "姜片适量",
+        "生抽、料酒、冰糖"
+      ]
+    },
+    {
+      "id": 40,
+      "name": "三杯鸡",
+      "category": "炒菜",
+      "subCategory": "鸡",
+      "description": "米酒酱油麻油三杯焖鸡，九层塔提香",
+      "tags": [
+        "经典"
+      ],
+      "image": "sanbeiji.jpg",
+      "ingredients": [
+        "鸡腿肉400克",
+        "米酒半杯",
+        "生抽、麻油各半杯",
+        "九层塔1把",
+        "姜蒜适量"
+      ]
+    },
+    {
+      "id": 11,
+      "name": "蒜蓉炸翅",
+      "category": "炒菜",
+      "description": "鸡翅腌制后裹蒜蓉面糊炸至金黄，蒜香浓郁，外酥里嫩",
+      "tags": [
+        "蒜香",
+        "酥脆"
+      ],
+      "image": "suzhajichi.jpg",
+      "ingredients": [
+        "鸡翅8只",
+        "鸡蛋1只",
+        "淀粉、面包糠",
+        "盐、五香粉、料酒"
+      ],
+      "subCategory": "鸡"
+    },
+    {
+      "id": 22,
+      "name": "炒猪肝",
+      "category": "炒菜",
+      "description": "猪肝切薄片旺火快炒，嫩滑不柴，补铁佳品",
+      "tags": [
+        "家常",
+        "嫩滑"
+      ],
+      "image": "chaozhugan.jpg",
+      "ingredients": [
+        "猪肝200克",
+        "青椒1只",
+        "葱姜适量",
+        "淀粉、料酒"
+      ],
+      "subCategory": "猪"
+    },
+    {
+      "id": 2,
+      "name": "咕咾肉",
+      "category": "炒菜",
+      "description": "传统粤菜，五花肉块炸至金黄，裹上酸甜糖醋汁，外酥里嫩，开胃下饭",
+      "tags": [
+        "酸甜",
+        "经典"
+      ],
+      "image": "gulurou.jpg",
+      "ingredients": [
+        "夹心肉200克",
+        "菠萝1瓶",
+        "青椒1只",
+        "鸡蛋1只",
+        "糖、醋、番茄酱"
+      ],
+      "subCategory": "猪"
+    },
+    {
+      "id": 42,
+      "name": "红烧肉",
+      "category": "炒菜",
+      "subCategory": "猪",
+      "description": "五花肉冰糖红烧，肥而不腻，入口即化",
+      "tags": [
+        "经典"
+      ],
+      "image": "hongshaorou.jpg",
+      "ingredients": [
+        "五花肉500克",
+        "冰糖30克",
+        "姜片适量",
+        "生抽、老抽、料酒",
+        "八角2颗"
+      ]
+    },
+    {
+      "id": 18,
+      "name": "椒盐排骨",
+      "category": "炒菜",
+      "description": "排骨炸至金黄，撒上椒盐，外酥里嫩，咸香可口",
+      "tags": [
+        "酥香",
+        "下酒"
+      ],
+      "image": "jiaoyanpaigu.jpg",
+      "ingredients": [
+        "三号肉300克（排骨）",
+        "鸡蛋1只",
+        "淀粉",
+        "椒盐粉、葱姜"
+      ],
+      "subCategory": "猪"
+    },
+    {
+      "id": 34,
+      "name": "辣椒炒肉",
+      "category": "炒菜",
+      "subCategory": "猪",
+      "description": "五花肉煸香，辣椒爆炒，咸香下饭",
+      "tags": [
+        "下饭"
+      ],
+      "image": "lajiaochaorou.jpg",
+      "ingredients": [
+        "五花肉250克",
+        "青红辣椒各3只",
+        "蒜瓣适量",
+        "生抽、老抽、料酒"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "青椒肉丝",
+      "category": "炒菜",
+      "description": "青椒脆爽，肉丝滑嫩，咸鲜下饭，最见火候的家常小炒",
+      "tags": [
+        "家常",
+        "下饭"
+      ],
+      "image": "qingjiaorousi.jpg",
+      "ingredients": [
+        "三号肉（大排去骨后的通脊肉）1块",
+        "鸡蛋1只",
+        "葱姜各100克",
+        "泡红椒5根",
+        "青椒2只"
+      ],
+      "subCategory": "猪"
+    },
+    {
+      "id": 43,
+      "name": "洋葱炒肉",
+      "category": "炒菜",
+      "subCategory": "猪",
+      "description": "洋葱与肉片同炒，鲜甜下饭",
+      "tags": [
+        "家常"
+      ],
+      "image": "yangcongchaorou.jpg",
+      "ingredients": [
+        "猪里脊200克",
+        "洋葱1个",
+        "生抽、料酒",
+        "盐、胡椒粉"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "银芽肉丝",
+      "category": "炒菜",
+      "description": "绿豆芽脆嫩，肉丝滑炒，清爽可口，简单见功夫的家常菜",
+      "tags": [
+        "清爽",
+        "家常"
+      ],
+      "image": "yinyarousi.jpg",
+      "ingredients": [
+        "三号肉（通脊肉）150克",
+        "绿豆芽200克",
+        "鸡蛋1只",
+        "葱姜各100克",
+        "泡红椒5根"
+      ],
+      "subCategory": "猪"
+    },
+    {
+      "id": 5,
+      "name": "鱼香肉丝",
+      "category": "炒菜",
+      "description": "经典川菜，肉丝配以木耳、笋丝，鱼香味浓郁，酸甜微辣",
+      "tags": [
+        "川菜",
+        "经典"
+      ],
+      "image": "yuxiangrousi.jpg",
+      "ingredients": [
+        "三号肉（通脊肉）1块",
+        "鸡蛋1只",
+        "葱姜各100克",
+        "泡红椒5根",
+        "木耳、笋丝"
+      ],
+      "subCategory": "猪"
+    },
+    {
+      "id": 21,
+      "name": "芙蓉蹄筋",
+      "category": "炒菜",
+      "description": "蹄筋软糯，蛋清如芙蓉般洁白，配以火腿木耳，清淡鲜美",
+      "tags": [
+        "清淡",
+        "鲜美"
+      ],
+      "image": "furongtijin.jpg",
+      "ingredients": [
+        "水发蹄筋250克",
+        "鸡蛋4只（取蛋清）",
+        "火腿片50克",
+        "黑木耳泡发好100克",
+        "黄瓜1段（长5cm）"
+      ],
+      "subCategory": "牛"
+    },
+    {
+      "id": 23,
+      "name": "蚝油牛肉",
+      "category": "炒菜",
+      "description": "牛肉滑嫩，蚝油提鲜，酱香浓郁，粤式经典",
+      "tags": [
+        "粤菜",
+        "鲜嫩"
+      ],
+      "image": "haoyouniurou.jpg",
+      "ingredients": [
+        "牛里脊200克",
+        "蚝油、鸡蛋清",
+        "淀粉",
+        "洋葱半个"
+      ],
+      "subCategory": "牛"
+    },
+    {
+      "id": 10,
+      "name": "白汁鳊鱼",
+      "category": "炒菜",
+      "description": "鳊鱼清蒸，白汁勾芡，鱼肉细嫩，原汁原味",
+      "tags": [
+        "清淡",
+        "鲜美"
+      ],
+      "image": "baizhibianyu.jpg",
+      "ingredients": [
+        "鳊鱼1条（0.5斤左右）",
+        "雨润牌方腿250克/块",
+        "葱姜、料酒"
+      ],
+      "subCategory": "鱼鲜"
+    },
+    {
+      "id": 14,
+      "name": "红烧鱼档",
+      "category": "炒菜",
+      "description": "鱼档浓油赤酱，红烧入味，肉质肥糯，胶质满满",
+      "tags": [
+        "红烧",
+        "本帮"
+      ],
+      "image": "hongshaodudang.jpg",
+      "ingredients": [
+        "青鱼肚档500克",
+        "葱姜适量",
+        "冰糖、料酒、酱油"
+      ],
+      "subCategory": "整鱼套餐"
+    },
+    {
+      "id": 45,
+      "name": "清蒸鲈鱼",
+      "category": "炒菜",
+      "subCategory": "鱼鲜",
+      "description": "鲈鱼清蒸，葱丝淋热油，鲜嫩原味",
+      "tags": [
+        "清淡"
+      ],
+      "image": "qingzhengluyu.jpg",
+      "ingredients": [
+        "鲈鱼1条（1斤左右）",
+        "葱姜适量",
+        "蒸鱼豉油2勺",
+        "料酒、油"
+      ]
+    },
+    {
+      "id": 12,
+      "name": "糖醋鱼块",
+      "category": "炒菜",
+      "description": "鱼块炸至酥脆，裹上糖醋汁，酸甜可口，外酥里嫩",
+      "tags": [
+        "酸甜",
+        "经典"
+      ],
+      "image": "tangcuyukuai.jpg",
+      "ingredients": [
+        "青鱼（取肉）400克",
+        "鸡蛋1只",
+        "姜葱各50克",
+        "糖、醋、淀粉"
+      ],
+      "subCategory": "整鱼套餐"
+    },
+    {
+      "id": 8,
+      "name": "响油鳝丝",
+      "category": "炒菜",
+      "description": "黄鳝切丝，重油重蒜，出锅热油浇淋滋滋作响，本帮经典",
+      "tags": [
+        "本帮",
+        "鲜美"
+      ],
+      "image": "xiangyoushansi.jpg",
+      "ingredients": [
+        "鳝丝400克",
+        "葱姜蒜各50克",
+        "菜心5棵",
+        "胡椒粉、香油"
+      ],
+      "subCategory": "鱼鲜"
+    },
+    {
+      "id": 13,
+      "name": "芝麻鱼条",
+      "category": "炒菜",
+      "description": "鱼条裹满白芝麻，炸至金黄，芝麻香脆，鱼肉鲜嫩",
+      "tags": [
+        "香脆",
+        "鲜嫩"
+      ],
+      "image": "zhimayutiao.jpg",
+      "ingredients": [
+        "青鱼（取肉）300克",
+        "白芝麻250克",
+        "鸡蛋1只",
+        "淀粉、盐"
+      ],
+      "subCategory": "整鱼套餐"
+    },
+    {
+      "id": 48,
+      "name": "炙烤醋青花",
+      "category": "炒菜",
+      "subCategory": "鱼鲜",
+      "description": "青花鱼炙烤，淋醋汁，外焦里嫩",
+      "tags": [
+        "鲜香"
+      ],
+      "image": "zhikaocuqinghua.jpg",
+      "ingredients": [
+        "青花鱼（鲭鱼）2条",
+        "米醋3勺",
+        "盐、柠檬半个"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "炒鱿鱼卷",
+      "category": "炒菜",
+      "description": "鱿鱼切花刀，卷成麦穗状，旺火快炒，脆嫩鲜美",
+      "tags": [
+        "海鲜",
+        "脆嫩"
+      ],
+      "image": "chaoyouyujuan.jpg",
+      "ingredients": [
+        "鱿鱼（水发）1只",
+        "大蒜头1只",
+        "葱姜适量",
+        "料酒、胡椒粉"
+      ],
+      "subCategory": "海鲜"
+    },
+    {
+      "id": 46,
+      "name": "黄油煎梭子蟹",
+      "category": "炒菜",
+      "subCategory": "海鲜",
+      "description": "梭子蟹黄油煎香，蟹肉鲜甜",
+      "tags": [
+        "鲜美"
+      ],
+      "image": "huangyoujiansuozixie.jpg",
+      "ingredients": [
+        "梭子蟹2只",
+        "黄油30克",
+        "姜蒜适量",
+        "盐、黑胡椒"
+      ]
+    },
+    {
+      "id": 1,
+      "name": "清炒虾仁",
+      "category": "炒菜",
+      "description": "选用鲜活河虾，手工剥壳，旺火快炒，虾仁洁白鲜嫩，口感Q弹",
+      "tags": [
+        "经典",
+        "鲜嫩"
+      ],
+      "image": "qingchaoxiaren.jpg",
+      "ingredients": [
+        "河虾（上浆好）虾仁50克",
+        "盒豆腐1盒",
+        "黄瓜2根",
+        "鸡蛋清、料酒、淀粉"
+      ],
+      "subCategory": "海鲜"
+    },
+    {
+      "id": 15,
+      "name": "蒜爆鱿鱼卷",
+      "category": "炒菜",
+      "description": "鱿鱼卷配大量蒜片爆炒，蒜香浓郁，脆嫩爽口",
+      "tags": [
+        "蒜香",
+        "脆嫩"
+      ],
+      "image": "suanbaoyouyujuan.jpg",
+      "ingredients": [
+        "鱿鱼（水发）1只",
+        "大蒜头1只",
+        "白豆腐干4块",
+        "葱姜、料酒"
+      ],
+      "subCategory": "海鲜"
+    },
+    {
+      "id": 16,
+      "name": "芫爆目鱼花",
+      "category": "炒菜",
+      "description": "目鱼切花刀爆炒，配以香菜，芫香扑鼻，脆嫩鲜美",
+      "tags": [
+        "海鲜",
+        "清香"
+      ],
+      "image": "yanbaomuyuhua.jpg",
+      "ingredients": [
+        "墨鱼1只",
+        "香菜1把",
+        "葱姜适量",
+        "料酒、胡椒粉"
+      ],
+      "subCategory": "海鲜"
+    },
+    {
+      "id": 36,
+      "name": "西红柿炒蛋",
+      "category": "炒菜",
+      "subCategory": "蛋类",
+      "description": "经典家常，西红柿酸甜配鸡蛋滑嫩",
+      "tags": [
+        "家常"
+      ],
+      "image": "xihongshichaodan.jpg",
+      "ingredients": [
+        "西红柿2个",
+        "鸡蛋3只",
+        "葱适量",
+        "盐、糖少许"
+      ]
+    },
+    {
+      "id": 33,
+      "name": "西红柿年糕炒鸡蛋",
+      "category": "炒菜",
+      "subCategory": "蛋类",
+      "description": "西红柿与年糕同炒，鸡蛋滑嫩，酸甜软糯",
+      "tags": [
+        "家常"
+      ],
+      "image": "xihongshiniangao.jpg",
+      "ingredients": [
+        "西红柿2个",
+        "年糕200克",
+        "鸡蛋2只",
+        "葱适量",
+        "盐、糖少许"
+      ]
+    },
+    {
+      "id": 19,
+      "name": "家常豆腐",
+      "category": "炒菜",
+      "description": "豆腐煎至两面金黄，配以木耳青椒烧制，家常味浓",
+      "tags": [
+        "家常",
+        "下饭"
+      ],
+      "image": "jiachangdoufu.jpg",
+      "ingredients": [
+        "老豆腐400克",
+        "金针菜（干）25克",
+        "黑木耳（干）25克",
+        "青椒1只",
+        "葱姜蒜各25克"
+      ],
+      "subCategory": "豆腐"
+    },
+    {
+      "id": 4,
+      "name": "麻婆豆腐",
+      "category": "炒菜",
+      "description": "嫩豆腐配肉末，麻辣鲜香，红油透亮，下饭神器",
+      "tags": [
+        "川菜",
+        "麻辣"
+      ],
+      "image": "mapodoufu.jpg",
+      "ingredients": [
+        "鸡脯肉2块（剁末）",
+        "内脂豆腐1盒",
+        "鸡蛋1只",
+        "豆瓣酱、花椒粉、葱花"
+      ],
+      "subCategory": "豆腐"
+    },
+    {
+      "id": 41,
+      "name": "炒豆角",
+      "category": "炒菜",
+      "subCategory": "素菜",
+      "description": "豆角清炒脆嫩，蒜香咸鲜",
+      "tags": [
+        "清爽"
+      ],
+      "image": "chaodoujiao.jpg",
+      "ingredients": [
+        "豆角300克",
+        "蒜瓣适量",
+        "干辣椒2只",
+        "盐"
+      ]
+    },
+    {
+      "id": 47,
+      "name": "炒时蔬",
+      "category": "炒菜",
+      "subCategory": "素菜",
+      "description": "当季时蔬旺火快炒，清爽解腻",
+      "tags": [
+        "清爽"
+      ],
+      "image": "chaoshishu.jpg",
+      "ingredients": [
+        "当季时蔬400克",
+        "蒜瓣适量",
+        "盐、油"
+      ]
+    },
+    {
+      "id": 20,
+      "name": "炒双菇",
+      "category": "炒菜",
+      "description": "草菇鲜菇同炒，鲜嫩爽滑，清香味美，素菜佳品",
+      "tags": [
+        "清爽",
+        "素菜"
+      ],
+      "image": "chaoshuanggu.jpg",
+      "ingredients": [
+        "草菇（或金钱香菇发好）250克",
+        "鲜蘑菇250克",
+        "菜心5棵",
+        "葱姜蒜各50克"
+      ],
+      "subCategory": "素菜"
+    },
+    {
+      "id": 38,
+      "name": "炒土豆片",
+      "category": "炒菜",
+      "subCategory": "素菜",
+      "description": "土豆片快炒，爽脆咸香",
+      "tags": [
+        "家常"
+      ],
+      "image": "chaotudoupian.jpg",
+      "ingredients": [
+        "土豆2个",
+        "青椒1只",
+        "蒜瓣适量",
+        "盐、醋少许"
+      ]
+    },
+    {
+      "id": 49,
+      "name": "水果&蔬菜沙拉",
+      "category": "炒菜",
+      "subCategory": "素菜",
+      "description": "时令果蔬沙拉，清爽开胃",
+      "tags": [
+        "清爽"
+      ],
+      "image": "shuiguoshala.jpg",
+      "ingredients": [
+        "生菜、番茄、黄瓜各适量",
+        "时令水果1份",
+        "沙拉酱或油醋汁"
+      ]
+    },
+    {
+      "id": 60,
+      "name": "蛋炒饭",
+      "category": "主食",
+      "subCategory": "主食",
+      "description": "米饭粒粒分明，蛋香浓郁，简单暖心",
+      "tags": [
+        "主食"
+      ],
+      "image": "danchaofan.jpg",
+      "ingredients": [
+        "隔夜米饭2碗",
+        "鸡蛋2只",
+        "葱花适量",
+        "盐少许"
+      ]
+    },
+    {
+      "id": 39,
+      "name": "酱油炒饭",
+      "category": "主食",
+      "subCategory": "主食",
+      "description": "隔夜饭配酱油炒制，粒粒分明，酱香浓郁",
+      "tags": [
+        "主食"
+      ],
+      "image": "jiangyouchaofan.jpg",
+      "ingredients": [
+        "隔夜米饭2碗",
+        "鸡蛋2只",
+        "火腿肠1根",
+        "葱花适量",
+        "生抽、老抽、盐"
+      ]
+    },
+    {
+      "id": 61,
+      "name": "馒头",
+      "category": "主食",
+      "subCategory": "主食",
+      "description": "手工老面馒头，松软有嚼劲",
+      "tags": [
+        "主食"
+      ],
+      "image": "mantou.jpg",
+      "ingredients": [
+        "中筋面粉400克",
+        "酵母5克",
+        "温水适量",
+        "糖少许"
+      ]
+    },
+    {
+      "id": 25,
+      "name": "成都蛋汤",
+      "category": "汤品",
+      "description": "成都家常蛋汤，蛋花轻柔，汤鲜味美，简单暖心",
+      "tags": [
+        "汤品",
+        "家常"
+      ],
+      "image": "chengdudantang.jpg",
+      "ingredients": [
+        "鸡蛋2只",
+        "雨润牌方腿100克",
+        "葱姜少许"
+      ],
+      "subCategory": "汤羹"
+    },
+    {
+      "id": 28,
+      "name": "木樨汤",
+      "category": "汤品",
+      "description": "鸡蛋、木耳、肉片、黄花同煮，蛋花似桂花，清淡鲜美",
+      "tags": [
+        "汤品",
+        "清淡"
+      ],
+      "image": "muxitang.jpg",
+      "ingredients": [
+        "鸡蛋4只",
+        "三号肉150克（长7cm）",
+        "黑木耳泡发好100克",
+        "黄瓜1段（长5cm）",
+        "火腿片50克"
+      ],
+      "subCategory": "汤羹"
+    },
+    {
+      "id": 24,
+      "name": "肉丝豆腐羹",
+      "category": "汤品",
+      "description": "肉丝、豆腐煮羹，浓稠顺滑，暖胃暖心",
+      "tags": [
+        "汤羹",
+        "暖胃"
+      ],
+      "image": "rousidoufugeng.jpg",
+      "ingredients": [
+        "肉丝100克",
+        "盒豆腐1盒",
+        "鸡蛋1只",
+        "葱姜少许"
+      ],
+      "subCategory": "汤羹"
+    },
+    {
+      "id": 26,
+      "name": "三片汤",
+      "category": "汤品",
+      "description": "肉片、鱼片、鸡片入汤，清汤鲜美，雅俗共赏",
+      "tags": [
+        "汤品",
+        "鲜美"
+      ],
+      "image": "sanpiantang.jpg",
+      "ingredients": [
+        "肉片、鱼片、鸡片各100克",
+        "白豆腐干4块",
+        "菜心适量",
+        "葱姜、料酒"
+      ],
+      "subCategory": "汤羹"
+    },
+    {
+      "id": 29,
+      "name": "酸辣汤",
+      "category": "汤品",
+      "description": "酸辣开胃，豆腐丝、鸡蛋、肉丝、木耳汇聚，暖胃醒酒",
+      "tags": [
+        "汤品",
+        "酸辣"
+      ],
+      "image": "suanlatang.jpg",
+      "ingredients": [
+        "夹心肉200克",
+        "内脂豆腐1盒",
+        "鸡鸭血1盒",
+        "大香菇（泡发好）4只",
+        "冬笋（或茭白）100克",
+        "鸡蛋1只",
+        "葱25克"
+      ],
+      "subCategory": "汤羹"
+    },
+    {
+      "id": 37,
+      "name": "西红柿蛋汤",
+      "category": "汤品",
+      "subCategory": "汤羹",
+      "description": "西红柿煮汤配蛋花，酸甜开胃",
+      "tags": [
+        "汤羹"
+      ],
+      "image": "xihongshidantang.jpg",
+      "ingredients": [
+        "西红柿1个",
+        "鸡蛋2只",
+        "葱适量",
+        "盐、香油"
+      ]
+    },
+    {
+      "id": 27,
+      "name": "榨菜肉丝蛋汤",
+      "category": "汤品",
+      "description": "榨菜提鲜，肉丝增香，蛋花如云，酸辣开胃",
+      "tags": [
+        "汤品",
+        "开胃"
+      ],
+      "image": "zhacairousidantang.jpg",
+      "ingredients": [
+        "三号肉150克",
+        "榨菜50克",
+        "鸡蛋2只",
+        "香油少许"
+      ],
+      "subCategory": "汤羹"
+    },
+    {
+      "id": 58,
+      "name": "三文鱼",
+      "category": "刺身",
+      "subCategory": "刺身",
+      "description": "厚切三文鱼刺身，入口即化，肥美鲜甜",
+      "tags": [
+        "刺身"
+      ],
+      "image": "sanwenyu.jpg",
+      "ingredients": [
+        "三文鱼刺身200克",
+        "芥末、酱油",
+        "柠檬片、白萝卜丝"
+      ]
+    },
+    {
+      "id": 59,
+      "name": "甜虾",
+      "category": "刺身",
+      "subCategory": "刺身",
+      "description": "鲜甜甜虾刺身，细腻软糯",
+      "tags": [
+        "刺身"
+      ],
+      "image": "tianxia.jpg",
+      "ingredients": [
+        "甜虾刺身150克",
+        "芥末、酱油"
+      ]
+    },
+    {
+      "id": 51,
+      "name": "家庭烤肉",
+      "category": "烧烤&烤肉",
+      "subCategory": "烤物",
+      "description": "家庭烤肉拼盘，自选蘸料，围炉畅聊",
+      "tags": [
+        "聚会"
+      ],
+      "image": "jiatingkaorou.jpg",
+      "ingredients": [
+        "五花肉、牛肉各200克",
+        "生菜1把",
+        "蒜片适量",
+        "孜然粉、辣椒面蘸料"
+      ]
+    },
+    {
+      "id": 52,
+      "name": "煎牛排",
+      "category": "烧烤&烤肉",
+      "subCategory": "煎物",
+      "description": "厚切牛排铁板煎制，外焦里嫩，锁住肉汁",
+      "tags": [
+        "西式"
+      ],
+      "image": "jianniupai.jpg",
+      "ingredients": [
+        "厚切牛排1块（200克）",
+        "黄油20克",
+        "海盐、黑胡椒",
+        "迷迭香少许"
+      ]
+    },
+    {
+      "id": 50,
+      "name": "烤羊排",
+      "category": "烧烤&烤肉",
+      "subCategory": "烤物",
+      "description": "羊排腌制炭烤，外焦里嫩，孜然香浓",
+      "tags": [
+        "炭烤"
+      ],
+      "image": "kaoyangpai.jpg",
+      "ingredients": [
+        "羊排500克",
+        "孜然粉、辣椒面",
+        "洋葱半个",
+        "生抽、盐"
+      ]
+    },
+    {
+      "id": 54,
+      "name": "炸藕饼",
+      "category": "油炸",
+      "subCategory": "油炸",
+      "description": "莲藕剁碎调馅，炸至金黄，藕香清甜",
+      "tags": [
+        "酥香"
+      ],
+      "image": "zhaoubing.jpg",
+      "ingredients": [
+        "莲藕1节",
+        "猪肉末150克",
+        "鸡蛋1只",
+        "葱姜末、淀粉",
+        "盐、生抽"
+      ]
+    },
+    {
+      "id": 55,
+      "name": "炸薯条",
+      "category": "油炸",
+      "subCategory": "油炸",
+      "description": "薯条炸至金黄酥脆，外酥内绵",
+      "tags": [
+        "酥脆"
+      ],
+      "image": "zhashutiao.jpg",
+      "ingredients": [
+        "土豆2个",
+        "淀粉适量",
+        "盐、油"
+      ]
+    },
+    {
+      "id": 53,
+      "name": "炸猪排",
+      "category": "油炸",
+      "subCategory": "油炸",
+      "description": "猪排裹粉油炸，外酥里嫩，配酱汁",
+      "tags": [
+        "酥脆"
+      ],
+      "image": "zhazhupai.jpg",
+      "ingredients": [
+        "猪里脊200克",
+        "鸡蛋1只",
+        "面包糠、淀粉",
+        "盐、胡椒粉"
+      ]
+    },
+    {
+      "id": 56,
+      "name": "潮汕牛肉锅",
+      "category": "火锅",
+      "subCategory": "火锅",
+      "description": "鲜切牛肉涮清汤锅底，牛肉鲜甜弹嫩",
+      "tags": [
+        "鲜香"
+      ],
+      "image": "chaoshanniurouguo.jpg",
+      "ingredients": [
+        "鲜切牛肉400克",
+        "牛骨汤底1锅",
+        "白萝卜、玉米各1份",
+        "芹菜末、沙茶酱蘸料"
+      ]
+    },
+    {
+      "id": 57,
+      "name": "日式寿喜烧",
+      "category": "火锅",
+      "subCategory": "火锅",
+      "description": "日式甜咸汤底，牛肉蔬菜同煮，配生食蛋",
+      "tags": [
+        "日式"
+      ],
+      "image": "rishishouxishao.jpg",
+      "ingredients": [
+        "牛肉片300克",
+        "豆腐、香菇、金针菇各1份",
+        "大葱1根",
+        "寿喜烧酱汁（酱油、味淋、糖）",
+        "生食蛋2只"
+      ]
+    },
+    {
+      "id": 62,
+      "name": "糖醋排骨",
+      "category": "炒菜",
+      "subCategory": "猪",
+      "description": "肋排炸至酥脆，裹上亮泽糖醋汁，酸甜适口，越啃越香",
+      "tags": [
+        "酸甜",
+        "经典"
+      ],
+      "image": "",
+      "ingredients": [
+        "肋排500克",
+        "鸡蛋1只",
+        "姜葱适量",
+        "糖、醋、番茄酱、淀粉",
+        "熟白芝麻少许"
+      ]
+    },
+    {
+      "id": 63,
+      "name": "糖醋里脊",
+      "category": "炒菜",
+      "subCategory": "猪",
+      "description": "里脊条外酥里嫩，糖醋汁浓亮挂浆，酸甜开胃，下饭首选",
+      "tags": [
+        "酸甜",
+        "下饭"
+      ],
+      "image": "",
+      "ingredients": [
+        "里脊肉300克",
+        "鸡蛋1只",
+        "姜末、蒜末适量",
+        "糖、醋、淀粉",
+        "白芝麻少许"
+      ]
+    }
+  ],
+  "orders": [],
+  "config": {
+    "chefName": "长生居主人",
+    "welcome": "人间烟火气，最抚凡人心。"
+  }
+}

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>长生居·图片匹配确认</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: "Noto Serif SC", "PingFang SC", "Microsoft YaHei", serif;
+            background: #faf5ea;
+            color: #4a3a2a;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 24px 16px 80px; }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e0d3b8;
+        }
+
+        h1 { color: #8a5a2b; font-size: 1.4em; font-weight: 600; letter-spacing: 2px; }
+
+        .back-link {
+            color: #7a5c3e;
+            text-decoration: none;
+            padding: 8px 18px;
+            border: 1px solid #cbb894;
+            border-radius: 8px;
+            background: #fffdf7;
+            font-size: 0.9em;
+        }
+
+        .tip {
+            background: #f6ecd9;
+            border: 1px solid #e0d3b8;
+            border-radius: 8px;
+            padding: 10px 16px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            color: #7a5c3e;
+        }
+
+        .dish-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 14px;
+        }
+
+        .dish-card {
+            background: #fffdf7;
+            border: 1px solid #e0d3b8;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .dish-card img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: contain;
+            background: #faf5ea;
+            border: 1px solid #e0d3b8;
+            border-radius: 8px;
+            image-rendering: pixelated;
+            margin-bottom: 8px;
+        }
+
+        .dish-card .name { font-size: 0.95em; color: #8a5a2b; font-weight: 600; }
+        .dish-card .cat { font-size: 0.75em; color: #a0826d; margin: 2px 0 8px; }
+
+        .change-btn {
+            width: 100%;
+            padding: 6px 0;
+            background: #8a5a2b;
+            color: #fff;
+            border: 1px solid #8a5a2b;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.85em;
+        }
+
+        .change-btn:hover { opacity: 0.9; }
+
+        /* 选择图片弹层 */
+        .modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(74, 58, 42, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            padding: 16px;
+        }
+        .modal-overlay.show { display: flex; }
+
+        .modal {
+            background: #fffdf7;
+            border: 1px solid #e0d3b8;
+            border-radius: 14px;
+            padding: 20px;
+            width: 100%;
+            max-width: 720px;
+            max-height: 86vh;
+            overflow-y: auto;
+        }
+
+        .modal h2 { color: #8a5a2b; font-size: 1.1em; margin-bottom: 14px; text-align: center; }
+
+        .img-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 10px;
+        }
+
+        .img-option {
+            border: 2px solid #e0d3b8;
+            border-radius: 8px;
+            padding: 6px;
+            cursor: pointer;
+            background: #faf5ea;
+            text-align: center;
+        }
+        .img-option:hover { border-color: #8a5a2b; }
+        .img-option.current { border-color: #4a7c59; }
+
+        .img-option img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: contain;
+            image-rendering: pixelated;
+            display: block;
+        }
+
+        .img-option .fname {
+            font-size: 0.65em;
+            color: #a0826d;
+            margin-top: 4px;
+            word-break: break-all;
+        }
+
+        .modal-close {
+            display: block;
+            margin: 16px auto 0;
+            padding: 8px 32px;
+            background: #faf5ea;
+            border: 1px solid #cbb894;
+            border-radius: 8px;
+            color: #7a5c3e;
+            cursor: pointer;
+            font-family: inherit;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>图片匹配确认</h1>
+            <a class="back-link" href="/">返回菜单</a>
+        </header>
+        <div class="tip">逐道确认菜品与图片是否对应。若不对应，点「更换图片」在图库中选择正确的一张，保存后立即生效。</div>
+        <div class="dish-grid" id="dishGrid"></div>
+    </div>
+
+    <div class="modal-overlay" id="pickModal">
+        <div class="modal">
+            <h2 id="pickTitle">选择图片</h2>
+            <div class="img-grid" id="imgGrid"></div>
+            <button class="modal-close" id="pickClose">关闭</button>
+        </div>
+    </div>
+
+    <script>
+        let menu = [];
+        let images = [];
+        let editingId = null;
+
+        async function load() {
+            const [m, i] = await Promise.all([
+                fetch('/api/menu').then(r => r.json()),
+                fetch('/api/images').then(r => r.json())
+            ]);
+            menu = m.menu;
+            images = i.images;
+            render();
+        }
+
+        function render() {
+            document.getElementById('dishGrid').innerHTML = menu.map(d => `
+                <div class="dish-card">
+                    <img src="${d.image}" alt="${d.name}">
+                    <div class="name">${d.name}</div>
+                    <div class="cat">${d.category} · ${d.image}</div>
+                    <button class="change-btn" data-id="${d.id}">更换图片</button>
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.change-btn').forEach(btn => {
+                btn.addEventListener('click', () => openPicker(parseInt(btn.dataset.id)));
+            });
+        }
+
+        function openPicker(id) {
+            editingId = id;
+            const dish = menu.find(m => m.id === id);
+            document.getElementById('pickTitle').textContent = `为「${dish.name}」选择图片`;
+            document.getElementById('imgGrid').innerHTML = images.map(img => `
+                <div class="img-option ${img === dish.image ? 'current' : ''}" data-img="${img}">
+                    <img src="${img}" alt="${img}">
+                    <div class="fname">${img}</div>
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.img-option').forEach(opt => {
+                opt.addEventListener('click', async () => {
+                    const res = await fetch('/api/dish-image', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: editingId, image: opt.dataset.img })
+                    });
+                    if (res.ok) {
+                        dish.image = opt.dataset.img;
+                        render();
+                        closePicker();
+                    } else {
+                        alert('保存失败，请重试');
+                    }
+                });
+            });
+
+            document.getElementById('pickModal').classList.add('show');
+        }
+
+        function closePicker() {
+            document.getElementById('pickModal').classList.remove('show');
+        }
+
+        document.getElementById('pickClose').addEventListener('click', closePicker);
+        document.getElementById('pickModal').addEventListener('click', e => {
+            if (e.target.id === 'pickModal') closePicker();
+        });
+
+        load();
+    </script>
+</body>
+</html>

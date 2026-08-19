@@ -1,0 +1,4 @@
+node_modules/
+public/_original-images/
+.DS_Store
+npm-debug.log*

@@ -1,0 +1,12 @@
+{
+  "name": "changshengju-menu",
+  "version": "1.0.0",
+  "description": "长生居·私房菜 - 家宴菜单预订系统",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
