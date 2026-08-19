@@ -87,13 +87,6 @@
             height: 100%;
             object-fit: cover;
             display: block;
-            transform: scale(1.02);
-            animation: bannerZoom 16s ease-in-out infinite alternate;
-        }
-
-        @keyframes bannerZoom {
-            from { transform: scale(1.02); }
-            to { transform: scale(1.1); }
         }
 
         .banner::after {
@@ -124,8 +117,7 @@
 
         .banner-cap {
             padding: 22px 50px;
-            background: radial-gradient(120% 140% at 50% 18%, rgba(12, 8, 4, .38), rgba(12, 8, 4, .74));
-            backdrop-filter: blur(3px);
+            background: radial-gradient(120% 140% at 50% 18%, rgba(12, 8, 4, .92), rgba(12, 8, 4, .96));
             border: 1px solid rgba(212, 169, 79, .30);
             border-radius: 18px;
             box-shadow: 0 10px 36px rgba(0, 0, 0, .55), inset 0 0 34px rgba(212, 169, 79, .07);
@@ -464,7 +456,7 @@
             border-radius: 12px;
             padding: 16px 18px 14px;
             cursor: pointer;
-            transition: all .28s ease;
+            transition: transform .28s ease, border-color .28s ease, background-color .28s ease, box-shadow .28s ease;
             animation: cardIn .5s ease both;
             overflow: hidden;
         }
@@ -2012,15 +2004,16 @@
                 0 0 30px rgba(242, 220, 164, .35),
                 0 4px 8px rgba(0, 0, 0, .85);
             opacity: 1;
+            will-change: opacity, transform;
             animation: calligIdle 4s ease-in-out 1.5s infinite;
         }
         @keyframes calligIdle {
-            0%, 100% { text-shadow: 0 0 10px rgba(242, 220, 164, .75), 0 0 30px rgba(242, 220, 164, .35), 0 4px 8px rgba(0, 0, 0, .85); }
-            50% { text-shadow: 0 0 16px rgba(255, 236, 178, .95), 0 0 44px rgba(242, 220, 164, .5), 0 4px 8px rgba(0, 0, 0, .85); }
+            0%, 100% { opacity: 1; }
+            50% { opacity: .86; }
         }
         .gate-intro.opening .gt-callig { animation: calligOut .55s cubic-bezier(.4, 0, .2, 1) forwards; }
         @keyframes calligOut {
-            to { opacity: 0; transform: translateY(-22px) scale(.94); filter: blur(4px); }
+            to { opacity: 0; transform: translateY(-22px) scale(.94); }
         }
 
         .gt-sub {
@@ -2090,7 +2083,6 @@
             border: 1px solid rgba(212, 169, 79, .55);
             border-radius: 999px;
             background: rgba(18, 11, 4, .6);
-            backdrop-filter: blur(4px);
             box-shadow: 0 0 30px rgba(212, 169, 79, .18), inset 0 0 18px rgba(212, 169, 79, .06);
             animation: hintIn 1s ease .3s both, hintPulse 2.4s ease-in-out 1.3s infinite;
         }
@@ -2189,7 +2181,7 @@
     <div class="dust" id="dust" aria-hidden="true"></div>
 
     <div class="banner">
-        <img src="banner.jpg" alt="长生居">
+        <img src="banner.jpg" alt="长生居" fetchpriority="high" decoding="async">
         <div class="banner-title">
             <div class="banner-cap">
                 <h1>长生居</h1>
@@ -2201,7 +2193,7 @@
 
     <div class="container">
         <div class="chef-section">
-            <img src="chef-avatar.jpg" alt="主厨" class="chef-avatar">
+            <img src="chef-avatar.jpg" alt="主厨" class="chef-avatar" decoding="async">
             <div class="chef-info">
                 <h2 id="chefName">长生居主人</h2>
                 <p id="welcomeText">欢迎来到长生居，这里没有菜单价格，只有家常味道。朋友相聚，家人围坐，吃的是一份心意，品的是一份温暖。</p>
@@ -2541,10 +2533,10 @@
             list.innerHTML = filtered.map((dish, idx) => {
                 const sel = selectedDishes.has(dish.id);
                 const imgBlock = dish.image
-                    ? `<img class="dish-img" src="${dish.image}" alt="${dish.name}" loading="lazy">`
+                    ? `<img class="dish-img" src="${dish.image}" alt="${dish.name}" loading="lazy" decoding="async">`
                     : `<div class="dish-img dish-img-text">${dish.name.slice(0, 1)}</div>`;
                 return `
-                    <div class="dish-item ${sel ? 'selected' : ''}" data-id="${dish.id}" style="animation-delay:${Math.min(idx * 45, 400)}ms">
+                    <div class="dish-item ${sel ? 'selected' : ''}" data-id="${dish.id}" style="animation-delay:${idx < 10 ? idx * 30 : 0}ms">
                         ${imgBlock}
                         <div class="dish-top">
                             <div class="dish-name">${dish.name}</div>
@@ -2572,7 +2564,7 @@
             });
         }
 
-        // ===== 快捷加选 =====
+        // ===== 快捷加选（局部更新，避免整列表重渲染） =====
         function toggleSelect(id) {
             if (selectedDishes.has(id)) {
                 selectedDishes.delete(id);
@@ -2580,7 +2572,12 @@
                 selectedDishes.add(id);
             }
             updateCart();
-            renderDishList();
+            const item = document.querySelector(`.dish-item[data-id="${id}"]`);
+            if (item) {
+                item.classList.toggle('selected', selectedDishes.has(id));
+                const qb = item.querySelector('.dish-quick');
+                if (qb) qb.textContent = selectedDishes.has(id) ? '✓' : '+';
+            }
         }
 
         // ===== 详情弹层 =====
