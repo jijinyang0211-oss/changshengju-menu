@@ -2234,6 +2234,12 @@
             </filter>
         </defs>
     </svg>
+
+    <!-- BGM 音频与开关（需在 script 前声明） -->
+    <audio id="bgmAudio" src="/music/bgm.mp3" loop preload="none"></audio>
+    <button class="bgm-btn" id="bgmBtn" aria-label="背景音乐"><span class="bgm-icon">♪</span></button>
+    <div class="bgm-tip">背景音乐</div>
+
         <!-- 开场动画：月洞门 -->
     <div class="gate-intro" id="gateIntro">
         <div class="gate-scene">
@@ -3173,7 +3179,7 @@
             gateOpened = true;
             gateIntro.classList.add('opening');
             gateHint.style.pointerEvents = 'none';
-            startBgm();
+            if (typeof startBgm === 'function') startBgm();
             setTimeout(() => {
                 mainContent.classList.add('entered');
                 gateIntro.classList.add('fade-out');
@@ -3216,10 +3222,5 @@
         });
     </script>
     </div><!-- /.main-content -->
-
-    <!-- BGM 音频与开关 -->
-    <audio id="bgmAudio" src="/music/bgm.mp3" loop preload="none"></audio>
-    <button class="bgm-btn" id="bgmBtn" aria-label="背景音乐"><span class="bgm-icon">♪</span></button>
-    <div class="bgm-tip">背景音乐</div>
 </body>
 </html>
