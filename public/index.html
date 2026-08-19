@@ -232,6 +232,8 @@
         }
 
         /* ===== 标题 ===== */
+        .pin-sentinel { height: 0; }
+
         .section-title {
             display: flex;
             align-items: center;
@@ -244,10 +246,9 @@
             transition: background .35s ease, box-shadow .35s ease, border-color .35s ease;
         }
 
-        /* 吸顶固定：半透明底衬柔和融入，与流内状态同宽同高，切换无跳动 */
+        /* 吸顶固定：不透明底衬，去除 backdrop-filter 避免滚动每帧重绘 */
         .section-title.pin {
-            background: linear-gradient(180deg, rgba(18, 12, 6, .94) 0%, rgba(18, 12, 6, .9) 100%);
-            backdrop-filter: blur(8px);
+            background: linear-gradient(180deg, rgba(18, 12, 6, .98) 0%, rgba(18, 12, 6, .96) 100%);
             border-bottom: 1px solid rgba(212, 169, 79, .12);
             box-shadow: 0 2px 10px rgba(0, 0, 0, .2);
         }
@@ -882,9 +883,8 @@
             left: 0;
             right: 0;
             z-index: 99;
-            background: rgba(20, 14, 8, .92);
+            background: rgba(20, 14, 8, .97);
             border-top: 1px solid var(--line);
-            backdrop-filter: blur(8px);
             padding: 14px 22px;
             display: flex;
             justify-content: space-between;
@@ -2269,6 +2269,7 @@
             </div>
         </div>
 
+        <div class="pin-sentinel" aria-hidden="true"></div>
         <div class="section-title">
             <div class="line"></div>
             <h2>今日菜单</h2>
@@ -3149,63 +3150,50 @@
         createDust();
         loadMenu();
 
-        // ===== 菜单区吸顶固定：滚到今日菜单标题即固定，标题+菜单+购物车同屏 =====
+        // ===== 菜单区吸顶固定：IntersectionObserver 驱动，回归原生滚动链，不做 JS 滚动劫持 =====
         const layoutEl = document.querySelector('.layout');
         const titleEl = document.querySelector('.section-title');
         const cartBarEl = document.querySelector('.cart-bar');
         const containerEl = document.querySelector('.container');
-        const mainAreaEl = layoutEl.querySelector('.main-area');
-        function onScrollPin() {
-            if (!layoutEl || !titleEl || !cartBarEl) return;
-            const tr = titleEl.getBoundingClientRect();
+        const sentinelEl = document.querySelector('.pin-sentinel');
+
+        function syncStickyMetrics() {
+            const mb = parseFloat(getComputedStyle(titleEl).marginBottom) || 0;
+            document.documentElement.style.setProperty('--title-h', (titleEl.offsetHeight + mb) + 'px');
+            document.documentElement.style.setProperty('--cart-h', cartBarEl.offsetHeight + 'px');
+        }
+
+        function applyPinned(pinned) {
             const isPinned = layoutEl.classList.contains('pinned');
-            // 已固定时：菜单区未滚回顶部前保持固定（内容连续），标题离开吸顶区 40px 后解除
-            const pinned = isPinned
-                ? (tr.top <= 40 || mainAreaEl.scrollTop > 2)
-                : tr.top <= 0;
-            const became = pinned && !isPinned;
-            const released = !pinned && isPinned;
-            if (became) {
-                // 菜单区用 sticky 吸顶，容器撑足高度避免吸顶空间不足
-                const mb = parseFloat(getComputedStyle(titleEl).marginBottom) || 0;
-                document.documentElement.style.setProperty('--title-h', (titleEl.offsetHeight + mb) + 'px');
-                document.documentElement.style.setProperty('--cart-h', cartBarEl.offsetHeight + 'px');
-            }
+            if (pinned === isPinned) return;
             layoutEl.classList.toggle('pinned', pinned);
             titleEl.classList.toggle('pin', pinned);
             if (pinned) {
-                // 用实际测量值确定标题区与购物车高度，保证标题、菜单、购物车同屏且菜单内部滚动
-                const mb = parseFloat(getComputedStyle(titleEl).marginBottom) || 0;
-                document.documentElement.style.setProperty('--title-h', (titleEl.offsetHeight + mb) + 'px');
-                document.documentElement.style.setProperty('--cart-h', cartBarEl.offsetHeight + 'px');
-                if (became) {
-                    // 撑高容器：让页面总高覆盖到标题贴顶处，sticky 吸顶不提前失效
-                    const cTopDoc = containerEl.getBoundingClientRect().top + window.scrollY;
-                    const need = window.scrollY + window.innerHeight - cTopDoc;
-                    containerEl.style.minHeight = Math.max(containerEl.scrollHeight, need) + 'px';
-                }
-            }
-            if (released) {
+                syncStickyMetrics();
+                // 撑高容器：保证标题与菜单有足够滚动空间维持吸顶，避免吸顶提前失效
+                const cTopDoc = containerEl.getBoundingClientRect().top + window.scrollY;
+                const need = window.scrollY + window.innerHeight - cTopDoc;
+                containerEl.style.minHeight = Math.max(containerEl.scrollHeight, need) + 'px';
+            } else {
                 containerEl.style.minHeight = '';
             }
         }
-        window.addEventListener('scroll', onScrollPin, { passive: true });
-        window.addEventListener('resize', onScrollPin);
-        onScrollPin();
 
-        // ===== 滚动修正：菜单区滚到底后向上滚动，应先回滚菜单内容而非滚动页面 =====
-        let lastWindowScY = window.scrollY;
-        let fixingScroll = false;
-        window.addEventListener('scroll', () => {
-            if (fixingScroll || !mainAreaEl) { lastWindowScY = window.scrollY; return; }
-            const delta = window.scrollY - lastWindowScY;
-            lastWindowScY = window.scrollY;
-            if (delta < 0 && layoutEl.classList.contains('pinned') && mainAreaEl.scrollTop > 2) {
-                fixingScroll = true;
-                mainAreaEl.scrollTop += delta;
-                window.scrollTo(0, window.scrollY - delta);
-                fixingScroll = false;
-            }
+        syncStickyMetrics();
+        if (window.IntersectionObserver && sentinelEl) {
+            // 哨兵位于标题正上方：滚出视口顶部即标题吸顶，滚回即解除；无每帧读布局
+            const io = new IntersectionObserver((entries) => {
+                applyPinned(!entries[0].isIntersecting);
+            }, { rootMargin: '-1px 0px 0px 0px' });
+            io.observe(sentinelEl);
+        } else {
+            // 降级：老浏览器退回 scroll 监听
+            window.addEventListener('scroll', () => {
+                applyPinned(titleEl.getBoundingClientRect().top <= 0);
+            }, { passive: true });
+        }
+        window.addEventListener('resize', () => {
+            if (layoutEl.classList.contains('pinned')) syncStickyMetrics();
         });
 
         // ===== 软键盘高度适配：键盘弹出时抬高弹窗，避免遮挡 =====
