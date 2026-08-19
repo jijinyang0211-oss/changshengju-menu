@@ -3,3 +3,7 @@ public/_original-images/
 .DS_Store
 npm-debug.log*
 .gh-credentials/
+
+# 订单数据不入版本库（服务端本地持久化，避免每次部署丢失线上订单）
+orders.json
+orders.json.tmp

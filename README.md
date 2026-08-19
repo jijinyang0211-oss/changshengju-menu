@@ -7,7 +7,7 @@
 ## 功能特性
 
 - 🎬 月洞门开场动画：点击「推门而入」穿门入场，展示「长生居」品牌名
-- 🍽️ 完整菜单：63 道菜品，按「冷菜 → 炒菜 → 主食 → 汤品 → 特色」分类展示，带插图与食材清单
+- 🍽️ 完整菜单：64 道菜品，按「冷菜 → 炒菜 → 主食 → 汤品 → 特色」分类展示，带插图与食材清单
 - 📅 日历 + 时段预订：日历选择日期（过去日期自动禁用），午市 / 晚市时段一键选择
 - 🧺 点菜购物篮：菜品按分类分组展示，支持增删、实时统计
 - ✅ 确认订单：提交前弹出确认单，展示全部菜品与备注
@@ -27,7 +27,8 @@
 ```
 changshengju-menu/
 ├── server.js          # Express 服务器与 REST API
-├── data.json          # 菜单数据 + 订单数据
+├── menu.json          # 菜单数据 + 配置（入版本库）
+├── orders.json        # 订单数据（不入版本库，服务端本地持久化）
 ├── package.json
 └── public/
     ├── index.html     # 用户端页面（菜单 / 预订 / 我的订单）
@@ -51,11 +52,12 @@ changshengju-menu/
 
 ## 数据说明
 
-`data.json` 包含三个部分：
+数据拆分为两个文件：
 
-- `menu`：菜品数组，每道菜含 `id / name / category / subCategory / description / tags / image / ingredients`
-- `orders`：订单数组，含预订人、日期时段、人数、忌口、想吃的菜、菜品明细与状态
-- `config`：主厨名称与欢迎语
+- `menu.json`：`menu`（菜品数组，含 `id / name / category / subCategory / description / tags / image / ingredients`）与 `config`（主厨名称与欢迎语）
+- `orders.json`：`orders`（订单数组，含预订人、日期时段、人数、忌口、想吃的菜、菜品明细与状态）
+
+`orders.json` 不入版本库，仅在服务器本地持久化，避免部署时覆盖线上订单。
 
 ---
 

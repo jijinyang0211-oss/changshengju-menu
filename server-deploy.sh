@@ -29,10 +29,26 @@ if ! command -v node >/dev/null 2>&1; then
 fi
 node -v
 
-echo "==> 3/5 拉取项目代码"
-rm -rf /opt/changshengju-menu
-git clone https://github.com/jijinyang0211-oss/changshengju-menu.git /opt/changshengju-menu
-cd /opt/changshengju-menu
+echo "==> 3/5 拉取项目代码（幂等更新，保留订单数据）"
+APP_DIR="/opt/changshengju-menu"
+REPO="https://github.com/jijinyang0211-oss/changshengju-menu.git"
+if [ -d "$APP_DIR/.git" ]; then
+  # 已部署过：仅更新代码，orders.json 不入 git 会被保留
+  cd "$APP_DIR"
+  git fetch origin
+  git reset --hard origin/main
+else
+  # 首次部署：克隆仓库
+  rm -rf "$APP_DIR"
+  git clone "$REPO" "$APP_DIR"
+  cd "$APP_DIR"
+fi
+
+# 订单数据文件不入 git，首次部署时创建空文件（已存在则保留线上订单）
+if [ ! -f "$APP_DIR/orders.json" ]; then
+  echo '{"orders":[]}' > "$APP_DIR/orders.json"
+fi
+
 npm install --omit=dev
 
 echo "==> 4/5 安装 PM2 并启动服务"
