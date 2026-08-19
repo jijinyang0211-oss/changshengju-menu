@@ -236,6 +236,19 @@
             align-items: center;
             gap: 14px;
             margin: 34px 0 22px;
+            position: sticky;
+            top: 0;
+            z-index: 130;
+        }
+
+        /* 吸顶固定：压掉外边距，加底衬背景，避免菜品从标题后透出 */
+        .section-title.pin {
+            margin: 0;
+            padding: 12px 16px;
+            background: linear-gradient(180deg, rgba(18, 12, 6, .97) 0%, rgba(18, 12, 6, .93) 100%);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(212, 169, 79, .18);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, .4);
         }
 
         .section-title .line {
@@ -265,14 +278,24 @@
             gap: 22px;
             align-items: stretch;
             position: sticky;
-            top: 0;
+            top: var(--title-h, 56px);
+            margin-top: 0;
         }
 
-        /* 吸顶固定后：菜单区占视口高度，菜品内部滚动 */
+        /* 吸顶固定后：标题下方占满到购物车上方，菜单内部滚动 */
         .layout.pinned {
-            height: calc(100vh - 76px);
-            height: calc(100dvh - 76px);
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            top: var(--title-h, 56px);
+            bottom: var(--cart-h, 76px);
+            width: 100%;
+            max-width: 1060px;
+            height: auto;
+            margin: 0;
+            padding: 0 20px;
             overflow: hidden;
+            z-index: 120;
         }
         .layout.pinned .main-area {
             height: 100%;
@@ -1769,6 +1792,10 @@
                 padding: 0 16px 120px;
             }
 
+            .layout.pinned {
+                padding: 0 16px;
+            }
+
             .layout {
                 gap: 14px;
             }
@@ -1850,6 +1877,10 @@
         @media (max-width: 480px) {
             .container {
                 padding: 0 10px 108px;
+            }
+
+            .layout.pinned {
+                padding: 0 10px;
             }
 
             .layout {
@@ -2034,7 +2065,8 @@
             width: max-content;
         }
 
-        /* 毛笔字招牌（深色底衬提升对比，不裁字） */
+        /* 毛笔字招牌（深色底衬提升对比，不裁字）
+           字体加载完成前保持透明，加载完成再淡入，避免从普通字体突变成毛笔字 */
         .gt-callig {
             text-align: center;
             font-family: 'MaShanZheng', 'STKaiti', 'KaiTi', serif;
@@ -2051,8 +2083,12 @@
                 0 0 10px rgba(242, 220, 164, .75),
                 0 0 30px rgba(242, 220, 164, .35),
                 0 4px 8px rgba(0, 0, 0, .85);
-            opacity: 1;
+            opacity: 0;
+            transition: opacity .8s ease;
             will-change: opacity, transform;
+        }
+        .gate-intro.fonts-ready .gt-callig {
+            opacity: 1;
             animation: calligIdle 4s ease-in-out 1.5s infinite;
         }
         @keyframes calligIdle {
@@ -2078,6 +2114,10 @@
                 0 0 20px rgba(20, 12, 4, .7),
                 0 0 26px rgba(212, 169, 79, .55),
                 0 2px 4px rgba(0, 0, 0, .9);
+            opacity: 0;
+            transition: opacity .8s ease .1s;
+        }
+        .gate-intro.fonts-ready .gt-sub {
             opacity: 1;
             animation: subIdle 4s ease-in-out 1.8s infinite;
         }
@@ -3128,14 +3168,39 @@
         createDust();
         loadMenu();
 
-        // ===== 菜单区吸顶固定：滚到今日菜单才切换内部滚动 =====
+        // ===== 菜单区吸顶固定：滚到今日菜单标题即固定，标题+菜单+购物车同屏 =====
         const layoutEl = document.querySelector('.layout');
+        const titleEl = document.querySelector('.section-title');
+        const cartBarEl = document.querySelector('.cart-bar');
+        const containerEl = document.querySelector('.container');
         function onScrollPin() {
-            if (!layoutEl) return;
-            const pinned = window.scrollY >= layoutEl.offsetTop - 8;
+            if (!layoutEl || !titleEl || !cartBarEl) return;
+            const tr = titleEl.getBoundingClientRect();
+            const isPinned = layoutEl.classList.contains('pinned');
+            // 固定判定带缓冲：已固定时向上滚过 40px 才解除，避免临界点反复切换
+            const pinned = isPinned ? tr.top <= 40 : tr.top <= 0;
+            const became = pinned && !isPinned;
+            const released = !pinned && isPinned;
+            if (became) {
+                // 菜单区将脱离文档流（转 fixed），用容器撑起原有高度：
+                // 避免文档高度塌缩导致滚动位置重置、标题 sticky 失效；
+                // 固定后页面恰好滚到标题贴顶，菜单改用内部滚动
+                const h = layoutEl.offsetHeight;
+                containerEl.style.minHeight = h + 'px';
+            }
             layoutEl.classList.toggle('pinned', pinned);
+            titleEl.classList.toggle('pin', pinned);
+            if (pinned) {
+                // 用实际测量值确定标题区与购物车高度，保证标题、菜单、购物车同屏且菜单内部滚动
+                document.documentElement.style.setProperty('--title-h', titleEl.offsetHeight + 'px');
+                document.documentElement.style.setProperty('--cart-h', cartBarEl.offsetHeight + 'px');
+            }
+            if (released) {
+                containerEl.style.minHeight = '';
+            }
         }
         window.addEventListener('scroll', onScrollPin, { passive: true });
+        window.addEventListener('resize', onScrollPin);
         onScrollPin();
 
         // ===== 软键盘高度适配：键盘弹出时抬高弹窗，避免遮挡 =====
@@ -3171,6 +3236,18 @@
         const gateHint = document.getElementById('gateHint');
         const mainContent = document.getElementById('mainContent');
         let gateOpened = false;
+
+        // 毛笔字体加载完成后再显示开场品牌文案，避免字体突变
+        (function readyFonts() {
+            const show = () => gateIntro && gateIntro.classList.add('fonts-ready');
+            if (!document.fonts || !document.fonts.load) { show(); return; }
+            Promise.all([
+                document.fonts.load('56px "MaShanZheng"'),
+                document.fonts.load('24px "MaShanZheng"')
+            ]).then(() => Promise.resolve(document.fonts.ready)).then(show).catch(show);
+            // 兜底：字体加载过慢时也显示文案，避免开场一直空白
+            setTimeout(show, 4000);
+        })();
 
         function openGate() {
             if (gateOpened) return;
