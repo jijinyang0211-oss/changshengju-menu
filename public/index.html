@@ -246,9 +246,9 @@
             transition: background .35s ease, box-shadow .35s ease, border-color .35s ease;
         }
 
-        /* 吸顶固定：不透明底衬，去除 backdrop-filter 避免滚动每帧重绘 */
+        /* 吸顶固定：底衬颜色与页面顶部背景 #1b140c 一致，避免吸顶后标题区变黑 */
         .section-title.pin {
-            background: linear-gradient(180deg, rgba(18, 12, 6, .98) 0%, rgba(18, 12, 6, .96) 100%);
+            background: linear-gradient(180deg, rgba(27, 20, 12, .98) 0%, rgba(27, 20, 12, .96) 100%);
             border-bottom: 1px solid rgba(212, 169, 79, .12);
             box-shadow: 0 2px 10px rgba(0, 0, 0, .2);
         }
