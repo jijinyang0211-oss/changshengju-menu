@@ -651,6 +651,7 @@
             justify-content: center;
             z-index: 200;
             padding: 16px;
+            padding-bottom: calc(16px + var(--kb-h, 0px));
             overscroll-behavior: contain;
         }
 
@@ -1835,9 +1836,10 @@
             .modal-overlay {
                 align-items: flex-end;
                 padding: 0;
+                padding-bottom: var(--kb-h, 0px);
             }
             .modal {
-                max-height: 88vh;
+                max-height: calc(88vh - var(--kb-h, 0px));
                 width: 100%;
                 max-width: none;
                 border-radius: 18px 18px 0 0;
@@ -2150,7 +2152,7 @@
             transform: scale(.94);
             transition: opacity .9s ease .15s, transform 1.1s cubic-bezier(.2, .7, .3, 1) .15s;
         }
-        .main-content.entered { opacity: 1; transform: scale(1); }
+        .main-content.entered { opacity: 1; transform: none; }
 
         @media (prefers-reduced-motion: reduce) {
             .gate-hint p, .hint-line::after { animation: none; }
@@ -3135,6 +3137,34 @@
         }
         window.addEventListener('scroll', onScrollPin, { passive: true });
         onScrollPin();
+
+        // ===== 软键盘高度适配：键盘弹出时抬高弹窗，避免遮挡 =====
+        if (window.visualViewport) {
+            const vv = window.visualViewport;
+            const syncKb = () => {
+                const kbH = Math.max(0, window.innerHeight - vv.height);
+                document.documentElement.style.setProperty('--kb-h', kbH + 'px');
+            };
+            vv.addEventListener('resize', syncKb);
+            vv.addEventListener('scroll', syncKb);
+            syncKb();
+        }
+
+        // ===== 输入框聚焦时，自动滚到键盘可视区内，避免被键盘遮挡 =====
+        document.querySelectorAll('.modal input, .modal textarea').forEach(el => {
+            el.addEventListener('focus', () => {
+                const modal = el.closest('.modal');
+                if (!modal) return;
+                setTimeout(() => {
+                    const vv = window.visualViewport;
+                    const r = el.getBoundingClientRect();
+                    const visBottom = vv ? vv.offsetTop + vv.height : window.innerHeight;
+                    if (r.bottom > visBottom - 24) {
+                        modal.scrollBy({ top: r.bottom - visBottom + 24, behavior: 'smooth' });
+                    }
+                }, 320);
+            });
+        });
 
         // ===== 开门动画 =====
         const gateIntro = document.getElementById('gateIntro');
