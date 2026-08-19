@@ -4,7 +4,6 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const HOST = process.env.HOST || '127.0.0.1';
 
 const DATA_FILE = path.join(__dirname, 'data.json');
 
@@ -165,8 +164,8 @@ app.get('/match', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'match.html'));
 });
 
-app.listen(PORT, HOST, () => {
+app.listen(PORT, () => {
   console.log(`长生居·私房菜 服务器已启动`);
-  console.log(`用户页面: http://${HOST}:${PORT}`);
-  console.log(`管理后台: http://${HOST}:${PORT}/admin`);
+  console.log(`用户页面: http://localhost:${PORT}`);
+  console.log(`管理后台: http://localhost:${PORT}/admin`);
 });

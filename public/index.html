@@ -36,28 +36,17 @@
         }
 
         body {
-            position: relative;
             font-family: 'MaShanZheng', "Noto Serif SC", "Songti SC", "SimSun", serif;
             color: var(--text);
             min-height: 100vh;
             line-height: 1.7;
-            background: var(--bg-deep);
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            text-rendering: optimizeLegibility;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            pointer-events: none;
             background:
                 radial-gradient(1100px 520px at 50% -8%, rgba(212, 169, 79, .12), transparent 62%),
                 radial-gradient(820px 460px at 100% 108%, rgba(212, 169, 79, .07), transparent 60%),
                 radial-gradient(700px 420px at 0% 100%, rgba(212, 169, 79, .05), transparent 60%),
                 linear-gradient(180deg, #1b140c 0%, var(--bg-deep) 100%);
+            background-attachment: fixed;
+            overflow-x: hidden;
         }
 
         /* ===== 背景飘尘粒子 ===== */
@@ -76,7 +65,6 @@
             background: radial-gradient(circle, var(--gold-l) 0%, rgba(212, 169, 79, .35) 60%, transparent 75%);
             animation: floatUp linear infinite;
             opacity: 0;
-            will-change: transform, opacity;
         }
 
         @keyframes floatUp {
@@ -192,7 +180,7 @@
             z-index: 1;
             max-width: 1060px;
             margin: 0 auto;
-            padding: 0 20px 85px;
+            padding: 0 20px 130px;
         }
 
         /* ===== 主厨区 ===== */
@@ -249,13 +237,19 @@
             align-items: center;
             gap: 14px;
             margin: 34px 0 22px;
-            padding: 12px 0 14px;
+            padding: 12px 0;
             position: sticky;
             top: 0;
             z-index: 130;
-            background: linear-gradient(180deg, rgba(18, 12, 6, .94) 0%, rgba(18, 12, 6, .88) 78%, rgba(18, 12, 6, 0) 100%);
+            transition: background .35s ease, box-shadow .35s ease, border-color .35s ease;
+        }
+
+        /* 吸顶固定：半透明底衬柔和融入，与流内状态同宽同高，切换无跳动 */
+        .section-title.pin {
+            background: linear-gradient(180deg, rgba(18, 12, 6, .94) 0%, rgba(18, 12, 6, .9) 100%);
+            backdrop-filter: blur(8px);
             border-bottom: 1px solid rgba(212, 169, 79, .12);
-            box-shadow: 0 1px 0 rgba(0, 0, 0, .18);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, .2);
         }
 
         .section-title .line {
@@ -285,14 +279,34 @@
             gap: 22px;
             align-items: stretch;
             position: sticky;
-            top: var(--menu-sticky-top, 82px);
-            height: calc(100vh - var(--menu-sticky-top, 82px) - var(--cart-h, 86px));
-            height: calc(100dvh - var(--menu-sticky-top, 82px) - var(--cart-h, 86px));
+            top: var(--title-h, 84px);
             margin-top: 0;
-            min-height: 0;
+            transition: height .3s ease;
+        }
+
+        /* 吸顶固定后：标题下方占满到购物车上方，菜单内部滚动 */
+        .layout.pinned {
+            height: calc(100vh - var(--title-h, 84px) - var(--cart-h, 85px));
+            height: calc(100dvh - var(--title-h, 84px) - var(--cart-h, 85px));
             overflow: hidden;
+            /* 固定背景：滚动时菜单区颜色恒定，不随页面背景渐变变化 */
             background: var(--bg);
-            border-radius: 14px 14px 0 0;
+        }
+        .layout.pinned .main-area {
+            height: 100%;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            background: var(--bg);
+            /* 不设 contain：菜品区滚到底/顶后可自然过渡到页面滚动，避免卡死 */
+        }
+        .layout.pinned .sidebar {
+            height: 100%;
+            overflow-y: auto;
+            scrollbar-width: none;
+            overscroll-behavior: contain;
+            /* 底部留出填充空间，品类栏可独立滚动，滑动不会穿透到页面 */
+            padding-bottom: 170px;
         }
         .sidebar::-webkit-scrollbar { display: none; }
 
@@ -301,11 +315,7 @@
             width: 172px;
             flex-shrink: 0;
             height: 100%;
-            min-height: 0;
             overflow-y: auto;
-            overscroll-behavior-y: contain;
-            touch-action: pan-y;
-            -webkit-overflow-scrolling: touch;
             background: var(--surface);
             border: 1px solid var(--line);
             border-radius: 14px;
@@ -458,16 +468,6 @@
         .main-area {
             flex: 1;
             min-width: 0;
-            height: 100%;
-            min-height: 0;
-            overflow-y: auto;
-            overscroll-behavior-y: contain;
-            touch-action: pan-y;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            background: rgba(18, 13, 7, .38);
-            border-radius: 14px;
-            padding: 2px;
         }
         .main-area::-webkit-scrollbar { display: none; }
 
@@ -505,7 +505,6 @@
             transition: transform .28s ease, border-color .28s ease, background-color .28s ease, box-shadow .28s ease;
             animation: cardIn .5s ease both;
             overflow: hidden;
-            contain: content;
         }
 
         @keyframes cardIn {
@@ -1783,15 +1782,11 @@
         /* ===== 响应式 ===== */
         @media (max-width: 820px) {
             .container {
-                padding: 0 16px 85px;
+                padding: 0 16px 120px;
             }
 
             .layout {
                 gap: 14px;
-            }
-
-            .dust {
-                display: none;
             }
 
             .sidebar {
@@ -1874,7 +1869,7 @@
 
         @media (max-width: 480px) {
             .container {
-                padding: 0 10px 85px;
+                padding: 0 10px 108px;
             }
 
             .layout {
@@ -1969,14 +1964,8 @@
 
         @media (prefers-reduced-motion: reduce) {
             .dust i, .banner img, .banner-title .rule::after, .chef-avatar,
-            .btn-confirm::after, .btn-pick::after, .reserve-btn::after,
-            .dish-item, .cat-group.open .cat-sub, .modal-overlay.show .modal,
-            .summary-row, .success-icon {
+            .btn-confirm::after, .btn-pick::after, .reserve-btn::after {
                 animation: none;
-            }
-
-            .main-content {
-                transition: none;
             }
         }
 
@@ -2495,8 +2484,8 @@
         // ===== 背景粒子 =====
         function createDust() {
             const wrap = document.getElementById('dust');
-            if (!wrap || window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.matchMedia('(max-width: 820px)').matches) return;
-            for (let i = 0; i < 10; i++) {
+            if (!wrap || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            for (let i = 0; i < 22; i++) {
                 const dot = document.createElement('i');
                 const size = 2 + Math.random() * 3;
                 dot.style.cssText = `left:${Math.random() * 100}%;width:${size}px;height:${size}px;
@@ -2587,7 +2576,6 @@
                         (subOrder.indexOf(b) === -1 ? 99 : subOrder.indexOf(b)))[0] || '';
                     renderSidebar();
                     renderDishList();
-                    resetMenuScroll();
                 });
             });
 
@@ -2597,7 +2585,6 @@
                     currentSub = btn.dataset.sub;
                     renderSidebar();
                     renderDishList();
-                    resetMenuScroll();
                 });
             });
         }
@@ -3162,31 +3149,64 @@
         createDust();
         loadMenu();
 
-        // ===== 吸顶尺寸同步：保留原生页面滚动，避免菜单区和页面抢滚动手势 =====
+        // ===== 菜单区吸顶固定：滚到今日菜单标题即固定，标题+菜单+购物车同屏 =====
         const layoutEl = document.querySelector('.layout');
         const titleEl = document.querySelector('.section-title');
         const cartBarEl = document.querySelector('.cart-bar');
-        const mainAreaEl = document.querySelector('.main-area');
         const containerEl = document.querySelector('.container');
-        function resetMenuScroll() {
-            if (mainAreaEl) mainAreaEl.scrollTop = 0;
-        }
-        function syncStickyMetrics() {
-            if (!titleEl || !cartBarEl) return;
-            const mb = parseFloat(getComputedStyle(titleEl).marginBottom) || 0;
-            document.documentElement.style.setProperty('--menu-sticky-top', (titleEl.offsetHeight + mb) + 'px');
-            document.documentElement.style.setProperty('--cart-h', cartBarEl.offsetHeight + 'px');
-            // 撑高容器：保证页面总高足以让标题与菜单吸顶，且吸顶后仍有滚动空间
-            if (containerEl) {
-                const layoutTopDoc = layoutEl.getBoundingClientRect().top + window.scrollY;
-                const stickyScroll = layoutTopDoc - (parseFloat(getComputedStyle(layoutEl).top) || 0);
-                const needDocH = stickyScroll + window.innerHeight + cartBarEl.offsetHeight;
-                const containerTopDoc = containerEl.getBoundingClientRect().top + window.scrollY;
-                containerEl.style.minHeight = Math.max(containerEl.scrollHeight, needDocH - containerTopDoc) + 'px';
+        const mainAreaEl = layoutEl.querySelector('.main-area');
+        function onScrollPin() {
+            if (!layoutEl || !titleEl || !cartBarEl) return;
+            const tr = titleEl.getBoundingClientRect();
+            const isPinned = layoutEl.classList.contains('pinned');
+            // 已固定时：菜单区未滚回顶部前保持固定（内容连续），标题离开吸顶区 40px 后解除
+            const pinned = isPinned
+                ? (tr.top <= 40 || mainAreaEl.scrollTop > 2)
+                : tr.top <= 0;
+            const became = pinned && !isPinned;
+            const released = !pinned && isPinned;
+            if (became) {
+                // 菜单区用 sticky 吸顶，容器撑足高度避免吸顶空间不足
+                const mb = parseFloat(getComputedStyle(titleEl).marginBottom) || 0;
+                document.documentElement.style.setProperty('--title-h', (titleEl.offsetHeight + mb) + 'px');
+                document.documentElement.style.setProperty('--cart-h', cartBarEl.offsetHeight + 'px');
+            }
+            layoutEl.classList.toggle('pinned', pinned);
+            titleEl.classList.toggle('pin', pinned);
+            if (pinned) {
+                // 用实际测量值确定标题区与购物车高度，保证标题、菜单、购物车同屏且菜单内部滚动
+                const mb = parseFloat(getComputedStyle(titleEl).marginBottom) || 0;
+                document.documentElement.style.setProperty('--title-h', (titleEl.offsetHeight + mb) + 'px');
+                document.documentElement.style.setProperty('--cart-h', cartBarEl.offsetHeight + 'px');
+                if (became) {
+                    // 撑高容器：让页面总高覆盖到标题贴顶处，sticky 吸顶不提前失效
+                    const cTopDoc = containerEl.getBoundingClientRect().top + window.scrollY;
+                    const need = window.scrollY + window.innerHeight - cTopDoc;
+                    containerEl.style.minHeight = Math.max(containerEl.scrollHeight, need) + 'px';
+                }
+            }
+            if (released) {
+                containerEl.style.minHeight = '';
             }
         }
-        window.addEventListener('resize', syncStickyMetrics);
-        syncStickyMetrics();
+        window.addEventListener('scroll', onScrollPin, { passive: true });
+        window.addEventListener('resize', onScrollPin);
+        onScrollPin();
+
+        // ===== 滚动修正：菜单区滚到底后向上滚动，应先回滚菜单内容而非滚动页面 =====
+        let lastWindowScY = window.scrollY;
+        let fixingScroll = false;
+        window.addEventListener('scroll', () => {
+            if (fixingScroll || !mainAreaEl) { lastWindowScY = window.scrollY; return; }
+            const delta = window.scrollY - lastWindowScY;
+            lastWindowScY = window.scrollY;
+            if (delta < 0 && layoutEl.classList.contains('pinned') && mainAreaEl.scrollTop > 2) {
+                fixingScroll = true;
+                mainAreaEl.scrollTop += delta;
+                window.scrollTo(0, window.scrollY - delta);
+                fixingScroll = false;
+            }
+        });
 
         // ===== 软键盘高度适配：键盘弹出时抬高弹窗，避免遮挡 =====
         if (window.visualViewport) {
