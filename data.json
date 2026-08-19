@@ -711,8 +711,8 @@
     {
       "id": 49,
       "name": "水果&蔬菜沙拉",
-      "category": "炒菜",
-      "subCategory": "素菜",
+      "category": "冷菜",
+      "subCategory": "冷菜",
       "description": "时令果蔬沙拉，清爽开胃",
       "tags": [
         "清爽"

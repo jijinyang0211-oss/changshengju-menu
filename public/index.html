@@ -262,15 +262,20 @@
         .layout {
             display: flex;
             gap: 22px;
-            align-items: flex-start;
+            align-items: stretch;
+            position: sticky;
+            top: 0;
+            height: calc(100vh - 76px);
+            height: calc(100dvh - 76px);
+            overflow: hidden;
         }
 
         /* ---- 侧边栏 ---- */
         .sidebar {
             width: 172px;
             flex-shrink: 0;
-            position: sticky;
-            top: 18px;
+            height: 100%;
+            overflow-y: auto;
             background: var(--surface);
             border: 1px solid var(--line);
             border-radius: 14px;
@@ -423,7 +428,12 @@
         .main-area {
             flex: 1;
             min-width: 0;
+            height: 100%;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
         }
+        .main-area::-webkit-scrollbar { display: none; }
 
         .crumb {
             font-size: .95em;
@@ -1739,8 +1749,6 @@
 
             .sidebar {
                 width: 138px;
-                position: sticky;
-                top: 10px;
                 padding: 10px 8px;
             }
 
