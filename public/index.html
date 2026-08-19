@@ -2161,6 +2161,47 @@
             .gate-hint p { font-size: 15px; letter-spacing: 5px; }
             .hint-line { width: 30px; }
         }
+
+        /* BGM 背景音乐开关 */
+        .bgm-btn {
+            position: fixed;
+            right: 22px;
+            bottom: 22px;
+            z-index: 9999;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: 1px solid rgba(212, 175, 55, .55);
+            background: radial-gradient(circle at 30% 30%, rgba(60, 42, 22, .92), rgba(24, 16, 8, .94));
+            color: #d9b96a;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, .5), inset 0 0 12px rgba(212, 175, 55, .12);
+            transition: transform .25s ease, box-shadow .25s ease;
+        }
+        .bgm-btn:hover { transform: scale(1.08); box-shadow: 0 6px 22px rgba(0, 0, 0, .6), 0 0 16px rgba(212, 175, 55, .35); }
+        .bgm-btn.playing .bgm-icon { animation: bgmSpin 2.4s linear infinite; }
+        @keyframes bgmSpin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+        .bgm-tip {
+            position: fixed;
+            right: 84px;
+            bottom: 34px;
+            z-index: 9999;
+            font-size: 12px;
+            color: rgba(217, 185, 106, .85);
+            letter-spacing: 2px;
+            background: rgba(24, 16, 8, .7);
+            border: 1px solid rgba(212, 175, 55, .3);
+            padding: 4px 10px;
+            border-radius: 6px;
+            opacity: 0;
+            transition: opacity .3s ease;
+            pointer-events: none;
+        }
+        .bgm-btn:hover + .bgm-tip { opacity: 1; }
 </style>
 </head>
 <body>
@@ -3132,6 +3173,7 @@
             gateOpened = true;
             gateIntro.classList.add('opening');
             gateHint.style.pointerEvents = 'none';
+            startBgm();
             setTimeout(() => {
                 mainContent.classList.add('entered');
                 gateIntro.classList.add('fade-out');
@@ -3150,7 +3192,34 @@
 
         // 支持按任意键开门
         document.addEventListener('keydown', openGate, { once: true });
+
+        // ===== 背景音乐 BGM =====
+        const bgmAudio = document.getElementById('bgmAudio');
+        const bgmBtn = document.getElementById('bgmBtn');
+        bgmAudio.volume = 0.45;
+
+        function startBgm() {
+            if (bgmAudio.paused) {
+                bgmAudio.play().catch(() => {});
+                bgmBtn.classList.add('playing');
+            }
+        }
+
+        bgmBtn.addEventListener('click', () => {
+            if (bgmAudio.paused) {
+                bgmAudio.play().catch(() => {});
+                bgmBtn.classList.add('playing');
+            } else {
+                bgmAudio.pause();
+                bgmBtn.classList.remove('playing');
+            }
+        });
     </script>
     </div><!-- /.main-content -->
+
+    <!-- BGM 音频与开关 -->
+    <audio id="bgmAudio" src="/music/bgm.mp3" loop preload="none"></audio>
+    <button class="bgm-btn" id="bgmBtn" aria-label="背景音乐"><span class="bgm-icon">♪</span></button>
+    <div class="bgm-tip">背景音乐</div>
 </body>
 </html>
