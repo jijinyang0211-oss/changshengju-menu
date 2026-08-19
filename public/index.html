@@ -104,7 +104,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
+            padding-top: clamp(24px, 5vw, 46px);
             gap: 8px;
             text-align: center;
             animation: bannerIn 1s ease both;
@@ -768,6 +769,13 @@
             display: flex;
             gap: 12px;
             margin-top: 4px;
+            position: sticky;
+            bottom: -28px;
+            margin-left: -28px;
+            margin-right: -28px;
+            padding: 22px 28px 6px;
+            background: linear-gradient(180deg, rgba(28, 21, 13, 0) 0%, rgba(28, 21, 13, .95) 42%);
+            z-index: 3;
         }
 
         .modal-btn {
