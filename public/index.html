@@ -2084,6 +2084,7 @@
             cursor: pointer;
             display: flex;
             align-items: center;
+            white-space: nowrap;
             gap: 18px;
             padding: 16px 34px;
             border: 1px solid rgba(212, 169, 79, .55);
@@ -2093,8 +2094,8 @@
             box-shadow: 0 0 30px rgba(212, 169, 79, .18), inset 0 0 18px rgba(212, 169, 79, .06);
             animation: hintIn 1s ease .3s both, hintPulse 2.4s ease-in-out 1.3s infinite;
         }
-        .gate-hint p { color: var(--gold-l); font-size: 17px; font-weight: 600; letter-spacing: 8px; margin: 0; text-indent: 8px; text-shadow: 0 0 14px rgba(212, 169, 79, .5); }
-        .hint-line { width: 44px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold)); position: relative; overflow: hidden; }
+        .gate-hint p { color: var(--gold-l); font-size: 17px; font-weight: 600; letter-spacing: 8px; margin: 0; text-indent: 8px; white-space: nowrap; flex-shrink: 0; text-shadow: 0 0 14px rgba(212, 169, 79, .5); }
+        .hint-line { width: 44px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold)); position: relative; overflow: hidden; flex-shrink: 0; }
         .hint-line.r { transform: scaleX(-1); }
         .hint-line::after { content: ''; position: absolute; top: 0; left: -30%; width: 30%; height: 100%; background: linear-gradient(90deg, transparent, var(--gold-l)); animation: lineShimmer 2.8s ease-in-out infinite; }
         @keyframes lineShimmer { 0% { left: -30%; } 60%, 100% { left: 110%; } }
