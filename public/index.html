@@ -246,7 +246,7 @@
 
         /* 吸顶固定：半透明底衬柔和融入，与流内状态同宽同高，切换无跳动 */
         .section-title.pin {
-            background: linear-gradient(180deg, rgba(18, 12, 6, .88) 0%, rgba(18, 12, 6, .82) 100%);
+            background: linear-gradient(180deg, rgba(18, 12, 6, .94) 0%, rgba(18, 12, 6, .9) 100%);
             backdrop-filter: blur(8px);
             border-bottom: 1px solid rgba(212, 169, 79, .12);
             box-shadow: 0 2px 10px rgba(0, 0, 0, .2);
@@ -281,7 +281,7 @@
             position: sticky;
             top: var(--title-h, 84px);
             margin-top: 0;
-            transition: height .2s ease;
+            transition: height .3s ease;
         }
 
         /* 吸顶固定后：标题下方占满到购物车上方，菜单内部滚动 */
@@ -289,12 +289,15 @@
             height: calc(100vh - var(--title-h, 84px) - var(--cart-h, 85px));
             height: calc(100dvh - var(--title-h, 84px) - var(--cart-h, 85px));
             overflow: hidden;
+            /* 固定背景：滚动时菜单区颜色恒定，不随页面背景渐变变化 */
+            background: var(--bg);
         }
         .layout.pinned .main-area {
             height: 100%;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
+            background: var(--bg);
             /* 不设 contain：菜品区滚到底/顶后可自然过渡到页面滚动，避免卡死 */
         }
         .layout.pinned .sidebar {
@@ -3189,6 +3192,21 @@
         window.addEventListener('scroll', onScrollPin, { passive: true });
         window.addEventListener('resize', onScrollPin);
         onScrollPin();
+
+        // ===== 滚动修正：菜单区滚到底后向上滚动，应先回滚菜单内容而非滚动页面 =====
+        let lastWindowScY = window.scrollY;
+        let fixingScroll = false;
+        window.addEventListener('scroll', () => {
+            if (fixingScroll || !mainAreaEl) { lastWindowScY = window.scrollY; return; }
+            const delta = window.scrollY - lastWindowScY;
+            lastWindowScY = window.scrollY;
+            if (delta < 0 && layoutEl.classList.contains('pinned') && mainAreaEl.scrollTop > 2) {
+                fixingScroll = true;
+                mainAreaEl.scrollTop += delta;
+                window.scrollTo(0, window.scrollY - delta);
+                fixingScroll = false;
+            }
+        });
 
         // ===== 软键盘高度适配：键盘弹出时抬高弹窗，避免遮挡 =====
         if (window.visualViewport) {
