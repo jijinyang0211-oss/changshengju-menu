@@ -303,11 +303,17 @@
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
+            overscroll-behavior: contain;
         }
         .layout.pinned .sidebar {
             height: 100%;
             overflow-y: auto;
+            scrollbar-width: none;
+            overscroll-behavior: contain;
+            /* 底部留出填充空间，保证品类栏可独立滚动，滑动时不会穿透到页面 */
+            padding-bottom: 90px;
         }
+        .sidebar::-webkit-scrollbar { display: none; }
 
         /* ---- 侧边栏 ---- */
         .sidebar {
@@ -707,19 +713,10 @@
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             overscroll-behavior: contain;
-            box-shadow: 0 30px 70px rgba(0, 0, 0, .7), inset 0 0 40px rgba(212, 169, 79, .05);
-        }
-
-        .modal::before {
-            content: '';
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            right: 10px;
-            bottom: 10px;
-            border: 1px solid rgba(212, 169, 79, .12);
-            border-radius: 10px;
-            pointer-events: none;
+            /* 内衬细线用 inset 阴影实现，不随内容滚动，避免与文案重叠 */
+            box-shadow: 0 30px 70px rgba(0, 0, 0, .7),
+                        inset 0 0 40px rgba(212, 169, 79, .05),
+                        inset 0 0 0 1px rgba(212, 169, 79, .14);
         }
 
         .modal > * {
