@@ -1821,9 +1821,17 @@
                 padding: 16px 34px;
             }
 
-            /* 移动端弹窗限制高度，内容可完整滚动 */
+            /* 移动端弹窗：底部抽屉式，内容完整可滚动 */
+            .modal-overlay {
+                align-items: flex-end;
+                padding: 0;
+            }
             .modal {
                 max-height: 88vh;
+                width: 100%;
+                max-width: none;
+                border-radius: 18px 18px 0 0;
+                padding-bottom: calc(26px + env(safe-area-inset-bottom, 0px));
             }
         }
 
