@@ -241,15 +241,16 @@
             position: sticky;
             top: 0;
             z-index: 130;
+            transition: background .35s ease, box-shadow .35s ease, border-color .35s ease;
         }
 
-        /* 吸顶固定：仅加背景与左右内边距，保持与流内状态同高，切换不跳动 */
+        /* 吸顶固定：半透明底衬柔和融入，切换不跳动也不突兀 */
         .section-title.pin {
             padding: 12px 16px;
-            background: linear-gradient(180deg, rgba(18, 12, 6, .97) 0%, rgba(18, 12, 6, .93) 100%);
+            background: linear-gradient(180deg, rgba(18, 12, 6, .88) 0%, rgba(18, 12, 6, .82) 100%);
             backdrop-filter: blur(8px);
-            border-bottom: 1px solid rgba(212, 169, 79, .18);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, .4);
+            border-bottom: 1px solid rgba(212, 169, 79, .12);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, .2);
         }
 
         .section-title .line {
