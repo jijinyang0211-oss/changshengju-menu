@@ -303,15 +303,15 @@
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
-            overscroll-behavior: contain;
+            /* 不设 contain：菜品区滚到底/顶后可自然过渡到页面滚动，避免卡死 */
         }
         .layout.pinned .sidebar {
             height: 100%;
             overflow-y: auto;
             scrollbar-width: none;
             overscroll-behavior: contain;
-            /* 底部留出填充空间，保证品类栏可独立滚动，滑动时不会穿透到页面 */
-            padding-bottom: 90px;
+            /* 底部留出填充空间，品类栏可独立滚动，滑动不会穿透到页面 */
+            padding-bottom: 170px;
         }
         .sidebar::-webkit-scrollbar { display: none; }
 
