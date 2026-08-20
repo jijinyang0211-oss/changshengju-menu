@@ -1000,6 +1000,33 @@
             color: var(--gold);
         }
 
+        .detail-steps {
+            list-style: none;
+            counter-reset: step;
+        }
+
+        .detail-steps li {
+            display: flex;
+            gap: 10px;
+            padding: 5px 0;
+            counter-increment: step;
+        }
+
+        .detail-steps li::before {
+            content: counter(step);
+            flex: none;
+            width: 22px;
+            height: 22px;
+            line-height: 22px;
+            text-align: center;
+            border-radius: 50%;
+            background: rgba(212, 169, 79, .12);
+            border: 1px solid rgba(212, 169, 79, .4);
+            color: var(--gold);
+            font-size: .78em;
+            margin-top: 2px;
+        }
+
         .modal-close {
             display: block;
             margin: 0 auto;
@@ -1090,6 +1117,10 @@
                 <h3>制作原材料</h3>
                 <ul id="dIngredients"></ul>
             </div>
+            <div class="detail-section">
+                <h3>常见做法</h3>
+                <ol class="detail-steps" id="dSteps"></ol>
+            </div>
             <button class="modal-close" id="dishModalClose">关闭</button>
         </div>
     </div>
@@ -1157,6 +1188,10 @@
             document.getElementById('dIngredients').innerHTML = ingredients.length
                 ? ingredients.map(i => `<li>${escapeHtml(i)}</li>`).join('')
                 : '<li style="color: var(--muted);">暂无食材记录</li>';
+            const steps = dish.steps || [];
+            document.getElementById('dSteps').innerHTML = steps.length
+                ? steps.map(s => `<li>${escapeHtml(s)}</li>`).join('')
+                : '<li style="color: var(--muted);">做法以当日主厨出品为准</li>';
 
             document.getElementById('dishModal').classList.add('show');
         }

@@ -54,7 +54,7 @@ changshengju-menu/
 
 数据拆分为两个文件：
 
-- `menu.json`：`menu`（菜品数组，含 `id / name / category / subCategory / description / tags / image / ingredients`）与 `config`（主厨名称与欢迎语）
+- `menu.json`：`menu`（菜品数组，含 `id / name / category / subCategory / description / tags / image / ingredients / steps`（常见做法流程））与 `config`（主厨名称与欢迎语）
 - `orders.json`：`orders`（订单数组，含预订人、日期时段、人数、忌口、想吃的菜、菜品明细与状态）
 
 `orders.json` 不入版本库，仅在服务器本地持久化，避免部署时覆盖线上订单。
