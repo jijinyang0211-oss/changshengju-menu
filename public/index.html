@@ -737,6 +737,17 @@
             margin-bottom: 16px;
         }
 
+        .detail-img-text {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            height: 150px;
+            font-size: 3.4em;
+            color: var(--gold);
+            background: linear-gradient(160deg, rgba(212, 169, 79, .1), rgba(38, 28, 17, .9));
+            border: 1px dashed var(--line);
+        }
+
         .detail-header {
             display: flex;
             align-items: center;
@@ -2337,7 +2348,8 @@
     <!-- 菜品详情弹层 -->
     <div class="modal-overlay" id="detailModal">
         <div class="modal">
-            <img src="" alt="" class="detail-image" id="detailImage">
+            <img src="" alt="" class="detail-image" id="detailImage" loading="lazy" decoding="async">
+            <div class="detail-image detail-img-text" id="detailImgPlaceholder"></div>
             <div class="detail-header">
                 <div class="detail-name" id="detailName"></div>
             </div>
@@ -2706,13 +2718,22 @@
             currentDetailId = id;
 
             const img = document.getElementById('detailImage');
+            const ph = document.getElementById('detailImgPlaceholder');
+            const showPlaceholder = () => {
+                img.style.display = 'none';
+                ph.textContent = dish.name.slice(0, 1);
+                ph.style.display = 'flex';
+            };
             if (dish.image) {
+                img.onerror = showPlaceholder;
                 img.src = dish.image;
                 img.alt = dish.name;
                 img.style.display = 'block';
+                ph.style.display = 'none';
             } else {
+                img.onerror = null;
                 img.removeAttribute('src');
-                img.style.display = 'none';
+                showPlaceholder();
             }
             document.getElementById('detailName').textContent = dish.name;
             document.getElementById('detailDesc').textContent = dish.description;
