@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>长生居·请柬</title>
+<style>
+    @font-face {
+        font-family: 'MaShanZheng';
+        src: url('fonts/ma-shan-zheng.woff2') format('woff2');
+        font-display: swap;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 540px; height: 960px; overflow: hidden; }
+    body {
+        font-family: 'MaShanZheng', 'STKaiti', 'KaiTi', "Songti SC", "STSong", serif;
+        position: relative;
+        background:
+            radial-gradient(420px 300px at 50% -6%, rgba(212,169,79,.16), transparent 62%),
+            radial-gradient(300px 220px at 12% 96%, rgba(212,169,79,.10), transparent 60%),
+            radial-gradient(280px 200px at 90% 88%, rgba(212,169,79,.07), transparent 60%),
+            linear-gradient(180deg, #221708 0%, #170f06 55%, #120b05 100%);
+        color: #f1e6d0;
+    }
+    /* 边框 */
+    .frame {
+        position: absolute;
+        inset: 16px;
+        border: 1px solid rgba(212,169,79,.55);
+        border-radius: 14px;
+        pointer-events: none;
+    }
+    .frame::before, .frame::after {
+        content: '';
+        position: absolute;
+        width: 34px; height: 34px;
+        border: 2px solid #d4a94f;
+    }
+    .frame::before { top: -2px; left: -2px; border-right: none; border-bottom: none; border-top-left-radius: 14px; }
+    .frame::after { bottom: -2px; right: -2px; border-left: none; border-top: none; border-bottom-right-radius: 14px; }
+    .frame-inner {
+        position: absolute;
+        inset: 24px;
+        border: 1px solid rgba(212,169,79,.22);
+        border-radius: 10px;
+        pointer-events: none;
+    }
+
+    .content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; align-items: center; padding: 54px 40px 40px; text-align: center; }
+
+    /* 顶部「诚邀」印章 */
+    .seal {
+        width: 58px; height: 58px;
+        border: 2px solid #d4a94f;
+        border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        color: #d4a94f;
+        font-size: 30px; line-height: 1;
+        transform: rotate(-6deg);
+        background: rgba(212,169,79,.06);
+        box-shadow: 0 0 22px rgba(212,169,79,.25), inset 0 0 12px rgba(212,169,79,.12);
+        letter-spacing: 2px;
+        text-indent: 2px;
+    }
+    .top-line { width: 240px; height: 1px; margin: 22px 0 0; background: linear-gradient(90deg, transparent, #d4a94f, transparent); }
+
+    /* 主厨头像 */
+    .chef {
+        width: 168px; height: 168px;
+        margin-top: 28px;
+        border-radius: 50%;
+        border: 2px solid rgba(212,169,79,.6);
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0 0 46px rgba(212,169,79,.38), 0 8px 26px rgba(0,0,0,.5);
+        background: radial-gradient(circle at 50% 30%, rgba(212,169,79,.28), rgba(18,13,7,.6) 70%);
+    }
+    .chef img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* 品牌 */
+    .brand {
+        margin-top: 30px;
+        font-size: 72px;
+        letter-spacing: .22em;
+        text-indent: .22em;
+        color: transparent;
+        background: linear-gradient(160deg, #fdf3cd 0%, #d4a94f 45%, #9c7622 75%, #f2dca4 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        filter: drop-shadow(0 4px 6px rgba(0,0,0,.8)) drop-shadow(0 0 24px rgba(212,169,79,.35));
+        line-height: 1.1;
+        white-space: nowrap;
+    }
+    .sub {
+        margin-top: 6px;
+        font-size: 21px;
+        color: #f2dca4;
+        letter-spacing: .5em;
+        text-indent: .5em;
+    }
+    .rule { width: 300px; height: 1px; margin: 24px 0; background: linear-gradient(90deg, transparent, #d4a94f 30%, #d4a94f 70%, transparent); position: relative; }
+    .rule::after { content: '❖'; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); color: #d4a94f; font-size: 12px; background: #1a1208; padding: 0 10px; }
+
+    /* 邀请语 */
+    .invite {
+        font-size: 26px;
+        letter-spacing: .14em;
+        text-indent: .14em;
+        color: #f1e6d0;
+        line-height: 1.5;
+    }
+    .invite em { font-style: normal; color: #d4a94f; }
+    .poem {
+        margin-top: 16px;
+        font-size: 18px;
+        letter-spacing: .22em;
+        text-indent: .22em;
+        color: #b8a588;
+        line-height: 1.8;
+    }
+
+    .spacer { flex: 1; }
+
+    /* 二维码区 */
+    .qr { width: 132px; height: 132px; background: #faf5ea; padding: 8px; border-radius: 12px; box-shadow: 0 6px 24px rgba(0,0,0,.55); border: 1px solid rgba(212,169,79,.5); }
+    .qr img { width: 100%; height: 100%; display: block; }
+    .qr-tip {
+        margin-top: 12px;
+        font-size: 19px;
+        letter-spacing: .2em;
+        text-indent: .2em;
+        color: #d4a94f;
+    }
+    .qr-sub {
+        margin-top: 4px;
+        font-size: 15px;
+        letter-spacing: .14em;
+        text-indent: .14em;
+        color: #b8a588;
+    }
+
+    .foot { margin-top: 18px; font-size: 15px; color: #8a7a5e; letter-spacing: .2em; text-indent: .2em; }
+
+    /* 飘尘 */
+    .dust { position: absolute; border-radius: 50%; background: rgba(212,169,79,.5); filter: blur(1px); pointer-events: none; z-index: 1; }
+</style>
+</head>
+<body>
+    <div class="frame"></div>
+    <div class="frame-inner"></div>
+
+    <div class="content">
+        <div class="seal">邀</div>
+        <div class="top-line"></div>
+
+        <div class="chef"><img src="chef-avatar.jpg" alt="主厨"></div>
+
+        <div class="brand">长生居</div>
+        <div class="sub">私房菜 · 家宴</div>
+        <div class="rule"></div>
+
+        <div class="invite">诚邀莅临 · <em>共品家宴</em></div>
+        <div class="poem">人间烟火气<br>最抚凡人心</div>
+
+        <div class="spacer"></div>
+
+        <div class="qr"><img src="invite.png" alt="订餐二维码"></div>
+        <div class="qr-tip">扫码 · 在线预订</div>
+        <div class="qr-sub">座位有限 敬请提前预约</div>
+
+        <div class="foot">长生居 · 私房菜</div>
+    </div>
+</body>
+</html>
