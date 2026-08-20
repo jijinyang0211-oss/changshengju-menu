@@ -11,7 +11,14 @@ const ORDERS_FILE = path.join(__dirname, 'orders.json');
 const IMAGES_FILE = path.join(__dirname, 'images.json');
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+// 静态文件：HTML 不缓存（改版后用户立即看到最新），图片等静态资源可缓存
+app.use(express.static(path.join(__dirname, 'public'), {
+  setHeaders(res, filePath) {
+    if (filePath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    }
+  }
+}));
 
 function readJSON(file, fallback) {
   try {
@@ -216,10 +223,12 @@ app.delete('/api/order/:id', requireAdmin, (req, res) => {
 });
 
 app.get('/admin', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.sendFile(path.join(__dirname, 'public', 'admin.html'));
 });
 
 app.get('/match', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.sendFile(path.join(__dirname, 'public', 'match.html'));
 });
 
