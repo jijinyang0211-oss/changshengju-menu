@@ -4,11 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>长生居·图片匹配确认</title>
+    <link rel="preload" href="fonts/ma-shan-zheng.woff2" as="font" type="font/woff2" crossorigin>
     <style>
+        @font-face {
+            font-family: 'MaShanZheng';
+            src: url('fonts/ma-shan-zheng.woff2') format('woff2');
+            font-display: swap;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: "Songti SC", "STSong", "SimSun", "PingFang SC", "Microsoft YaHei", serif;
+            font-family: 'MaShanZheng', 'STKaiti', 'KaiTi', "Songti SC", "STSong", "SimSun", "PingFang SC", "Microsoft YaHei", serif;
             background: #faf5ea;
             color: #4a3a2a;
             min-height: 100vh;
