@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>长生居·图片匹配确认</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap');
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: "Noto Serif SC", "PingFang SC", "Microsoft YaHei", serif;
+            font-family: "Songti SC", "STSong", "SimSun", "PingFang SC", "Microsoft YaHei", serif;
             background: #faf5ea;
             color: #4a3a2a;
             min-height: 100vh;
@@ -185,6 +183,24 @@
         let images = [];
         let editingId = null;
 
+        function escapeHtml(str) {
+            return String(str == null ? '' : str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function getAdminToken() {
+            let t = localStorage.getItem('admin_token');
+            if (!t) {
+                t = prompt('请输入管理密码');
+                if (t) localStorage.setItem('admin_token', t);
+            }
+            return t || '';
+        }
+
         async function load() {
             const [m, i] = await Promise.all([
                 fetch('/api/menu').then(r => r.json()),
@@ -198,9 +214,9 @@
         function render() {
             document.getElementById('dishGrid').innerHTML = menu.map(d => `
                 <div class="dish-card">
-                    <img src="${d.image}" alt="${d.name}">
-                    <div class="name">${d.name}</div>
-                    <div class="cat">${d.category} · ${d.image}</div>
+                    <img src="${escapeHtml(d.image)}" alt="${escapeHtml(d.name)}">
+                    <div class="name">${escapeHtml(d.name)}</div>
+                    <div class="cat">${escapeHtml(d.category)} · ${escapeHtml(d.image)}</div>
                     <button class="change-btn" data-id="${d.id}">更换图片</button>
                 </div>
             `).join('');
@@ -215,9 +231,9 @@
             const dish = menu.find(m => m.id === id);
             document.getElementById('pickTitle').textContent = `为「${dish.name}」选择图片`;
             document.getElementById('imgGrid').innerHTML = images.map(img => `
-                <div class="img-option ${img === dish.image ? 'current' : ''}" data-img="${img}">
-                    <img src="${img}" alt="${img}">
-                    <div class="fname">${img}</div>
+                <div class="img-option ${img === dish.image ? 'current' : ''}" data-img="${escapeHtml(img)}">
+                    <img src="${escapeHtml(img)}" alt="${escapeHtml(img)}">
+                    <div class="fname">${escapeHtml(img)}</div>
                 </div>
             `).join('');
 
@@ -225,13 +241,16 @@
                 opt.addEventListener('click', async () => {
                     const res = await fetch('/api/dish-image', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: { 'Content-Type': 'application/json', 'X-Admin-Token': getAdminToken() },
                         body: JSON.stringify({ id: editingId, image: opt.dataset.img })
                     });
                     if (res.ok) {
                         dish.image = opt.dataset.img;
                         render();
                         closePicker();
+                    } else if (res.status === 401) {
+                        localStorage.removeItem('admin_token');
+                        alert('密码错误，请重试');
                     } else {
                         alert('保存失败，请重试');
                     }

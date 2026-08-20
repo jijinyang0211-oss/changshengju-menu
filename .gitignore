@@ -7,3 +7,7 @@ npm-debug.log*
 # 订单数据不入版本库（服务端本地持久化，避免每次部署丢失线上订单）
 orders.json
 orders.json.tmp
+
+# 菜品图片映射不入版本库（服务端本地持久化，避免每次部署丢失管理员改图）
+images.json
+images.json.tmp

@@ -49,6 +49,11 @@ if [ ! -f "$APP_DIR/orders.json" ]; then
   echo '{"orders":[]}' > "$APP_DIR/orders.json"
 fi
 
+# 菜品图片映射不入 git，首次部署时创建空对象（已存在则保留管理员改图）
+if [ ! -f "$APP_DIR/images.json" ]; then
+  echo '{}' > "$APP_DIR/images.json"
+fi
+
 npm install --omit=dev
 
 echo "==> 4/5 安装 PM2 并启动服务"

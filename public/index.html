@@ -6,7 +6,6 @@
     <title>长生居 · 私房菜</title>
     <link rel="preload" href="fonts/ma-shan-zheng.woff2" as="font" type="font/woff2" crossorigin>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&display=swap');
         @font-face {
             font-family: 'MaShanZheng';
             src: url('fonts/ma-shan-zheng.woff2') format('woff2');
@@ -36,7 +35,7 @@
         }
 
         body {
-            font-family: 'MaShanZheng', "Noto Serif SC", "Songti SC", "SimSun", serif;
+            font-family: 'MaShanZheng', "Songti SC", "STSong", "SimSun", "PingFang SC", "Microsoft YaHei", serif;
             color: var(--text);
             min-height: 100vh;
             line-height: 1.7;
@@ -2476,6 +2475,17 @@
         let selectedDishes = new Set();
         let currentCat = '';
         let currentSub = '';
+        let cachedGroups = null;
+
+        // HTML 转义，防止用户输入注入脚本（XSS）
+        function escapeHtml(str) {
+            return String(str == null ? '' : str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
 
         // ===== 背景粒子 =====
         function createDust() {
@@ -2500,10 +2510,15 @@
                 const data = await res.json();
                 menu = data.menu;
                 categories = data.categories;
+                cachedGroups = null;
 
                 document.getElementById('chefName').textContent = data.config.chefName;
                 document.getElementById('welcomeText').textContent = data.config.welcome;
 
+                if (!menu || menu.length === 0) {
+                    document.getElementById('dishList').innerHTML = '<div class="order-empty">暂无菜品</div>';
+                    return;
+                }
                 const first = menu[0];
                 currentCat = first.category;
                 currentSub = first.subCategory || '';
@@ -2516,29 +2531,31 @@
 
         // ===== 品类分组 =====
         function buildGroups() {
-            const groups = {};
+            if (cachedGroups) return cachedGroups;
+            cachedGroups = {};
             menu.forEach(d => {
-                const g = groups[d.category] || (groups[d.category] = {});
+                const g = cachedGroups[d.category] || (cachedGroups[d.category] = {});
                 const sub = d.subCategory || '全部';
                 (g[sub] || (g[sub] = [])).push(d);
             });
-            return groups;
+            return cachedGroups;
         }
+
+        const SUB_ORDER = ['鸡', '猪', '牛', '鱼鲜', '海鲜', '蛋类', '豆腐', '素菜', '整鱼套餐', '烤物', '煎物', '油炸', '火锅', '刺身', '全部'];
+        const CAT_ICON = {
+            '冷菜': '🥢', '炒菜': '🍳', '主食': '🍚', '汤品': '🍲',
+            '刺身': '🍣', '烧烤&烤肉': '🍖', '油炸': '🍤', '火锅': '🫕'
+        };
 
         // ===== 侧边栏 =====
         function renderSidebar() {
             const wrap = document.getElementById('categorySidebar');
             const groups = buildGroups();
-            const subOrder = ['鸡', '猪', '牛', '鱼鲜', '海鲜', '蛋类', '豆腐', '素菜', '整鱼套餐', '烤物', '煎物', '油炸', '火锅', '刺身', '全部'];
-            const catIcon = {
-                '冷菜': '🥢', '炒菜': '🍳', '主食': '🍚', '汤品': '🍲',
-                '刺身': '🍣', '烧烤&烤肉': '🍖', '油炸': '🍤', '火锅': '🫕'
-            };
 
             wrap.innerHTML = categories.map(cat => {
                 const subs = groups[cat] || {};
                 const subKeys = Object.keys(subs).sort((a, b) => {
-                    const ia = subOrder.indexOf(a), ib = subOrder.indexOf(b);
+                    const ia = SUB_ORDER.indexOf(a), ib = SUB_ORDER.indexOf(b);
                     return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
                 });
                 const total = subKeys.reduce((s, k) => s + subs[k].length, 0);
@@ -2547,43 +2564,44 @@
 
                 return `
                     <div class="cat-group ${open ? 'open' : ''}">
-                        <button class="cat-primary ${open ? 'active' : ''}" data-cat="${cat}">
-                            ${catIcon[cat] ? `<span class="cat-ico">${catIcon[cat]}</span>` : ''}
-                            <span class="cat-name">${cat}</span><span class="count">${total}</span>
+                        <button class="cat-primary ${open ? 'active' : ''}" data-cat="${escapeHtml(cat)}">
+                            ${CAT_ICON[cat] ? `<span class="cat-ico">${CAT_ICON[cat]}</span>` : ''}
+                            <span class="cat-name">${escapeHtml(cat)}</span><span class="count">${total}</span>
                         </button>
                         ${showSub ? `
                         <div class="cat-sub">
                             ${subKeys.map(k => `
-                                <button class="cat-sub-item ${open && k === currentSub ? 'active' : ''}" data-cat="${cat}" data-sub="${k}">
-                                    ${k}<span class="count">${subs[k].length}</span>
+                                <button class="cat-sub-item ${open && k === currentSub ? 'active' : ''}" data-cat="${escapeHtml(cat)}" data-sub="${escapeHtml(k)}">
+                                    ${escapeHtml(k)}<span class="count">${subs[k].length}</span>
                                 </button>`).join('')}
                         </div>` : ''}
                     </div>`;
             }).join('');
-
-            wrap.querySelectorAll('.cat-primary').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const cat = btn.dataset.cat;
-                    if (cat === currentCat) return;
-                    currentCat = cat;
-                    const subs = buildGroups()[cat] || {};
-                    currentSub = Object.keys(subs).sort((a, b) =>
-                        (subOrder.indexOf(a) === -1 ? 99 : subOrder.indexOf(a)) -
-                        (subOrder.indexOf(b) === -1 ? 99 : subOrder.indexOf(b)))[0] || '';
-                    renderSidebar();
-                    renderDishList();
-                });
-            });
-
-            wrap.querySelectorAll('.cat-sub-item').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    currentCat = btn.dataset.cat;
-                    currentSub = btn.dataset.sub;
-                    renderSidebar();
-                    renderDishList();
-                });
-            });
         }
+
+        // 侧边栏点击事件委托（在容器上绑一次，避免每次重建后重复绑定）
+        document.getElementById('categorySidebar').addEventListener('click', (e) => {
+            const subBtn = e.target.closest('.cat-sub-item');
+            if (subBtn) {
+                currentCat = subBtn.dataset.cat;
+                currentSub = subBtn.dataset.sub;
+                renderSidebar();
+                renderDishList();
+                return;
+            }
+            const catBtn = e.target.closest('.cat-primary');
+            if (catBtn) {
+                const cat = catBtn.dataset.cat;
+                if (cat === currentCat) return;
+                currentCat = cat;
+                const subs = buildGroups()[cat] || {};
+                currentSub = Object.keys(subs).sort((a, b) =>
+                    (SUB_ORDER.indexOf(a) === -1 ? 99 : SUB_ORDER.indexOf(a)) -
+                    (SUB_ORDER.indexOf(b) === -1 ? 99 : SUB_ORDER.indexOf(b)))[0] || '';
+                renderSidebar();
+                renderDishList();
+            }
+        });
 
         // ===== 菜品列表 =====
         function renderDishList() {
@@ -2593,43 +2611,51 @@
             const filtered = (subs[currentSub] || Object.values(subs).flat()).slice();
 
             document.getElementById('crumb').innerHTML =
-                `<b>${currentCat}</b><i>›</i><b>${currentSub}</b>`;
+                `<b>${escapeHtml(currentCat)}</b><i>›</i><b>${escapeHtml(currentSub)}</b>`;
 
             list.innerHTML = filtered.map((dish, idx) => {
                 const sel = selectedDishes.has(dish.id);
                 const imgBlock = dish.image
-                    ? `<img class="dish-img" src="${dish.image}" alt="${dish.name}" loading="lazy" decoding="async">`
-                    : `<div class="dish-img dish-img-text">${dish.name.slice(0, 1)}</div>`;
+                    ? `<img class="dish-img" src="${escapeHtml(dish.image)}" alt="${escapeHtml(dish.name)}" loading="lazy" decoding="async">`
+                    : `<div class="dish-img dish-img-text">${escapeHtml(dish.name.slice(0, 1))}</div>`;
                 return `
                     <div class="dish-item ${sel ? 'selected' : ''}" data-id="${dish.id}" style="animation-delay:${idx < 10 ? idx * 30 : 0}ms">
                         ${imgBlock}
                         <div class="dish-top">
-                            <div class="dish-name">${dish.name}</div>
+                            <div class="dish-name">${escapeHtml(dish.name)}</div>
                             <button class="dish-quick" data-id="${dish.id}">${sel ? '✓' : '+'}</button>
                         </div>
                         <div class="dish-tags">
-                            ${dish.tags.map(t => `<span class="dish-tag">${t}</span>`).join('')}
+                            ${(dish.tags || []).map(t => `<span class="dish-tag">${escapeHtml(t)}</span>`).join('')}
                         </div>
                         <div class="dish-hint">查看图片与食材 · 点菜</div>
                     </div>`;
             }).join('');
-
-            list.querySelectorAll('.dish-item').forEach(item => {
-                item.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('dish-quick')) return;
-                    openDetail(parseInt(item.dataset.id));
-                });
-            });
-
-            list.querySelectorAll('.dish-quick').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    toggleSelect(parseInt(btn.dataset.id));
-                });
-            });
         }
 
+        // 菜品列表点击事件委托（在容器上绑一次，避免每次重建后重复绑定）
+        document.getElementById('dishList').addEventListener('click', (e) => {
+            const quick = e.target.closest('.dish-quick');
+            if (quick) {
+                toggleSelect(parseInt(quick.dataset.id));
+                return;
+            }
+            const item = e.target.closest('.dish-item');
+            if (item) {
+                openDetail(parseInt(item.dataset.id));
+            }
+        });
+
         // ===== 快捷加选（局部更新，避免整列表重渲染） =====
+        function syncDishCardState(id) {
+            const item = document.querySelector(`.dish-item[data-id="${id}"]`);
+            if (item) {
+                item.classList.toggle('selected', selectedDishes.has(id));
+                const qb = item.querySelector('.dish-quick');
+                if (qb) qb.textContent = selectedDishes.has(id) ? '✓' : '+';
+            }
+        }
+
         function toggleSelect(id) {
             if (selectedDishes.has(id)) {
                 selectedDishes.delete(id);
@@ -2637,12 +2663,7 @@
                 selectedDishes.add(id);
             }
             updateCart();
-            const item = document.querySelector(`.dish-item[data-id="${id}"]`);
-            if (item) {
-                item.classList.toggle('selected', selectedDishes.has(id));
-                const qb = item.querySelector('.dish-quick');
-                if (qb) qb.textContent = selectedDishes.has(id) ? '✓' : '+';
-            }
+            syncDishCardState(id);
         }
 
         // ===== 详情弹层 =====
@@ -2662,10 +2683,10 @@
             }
             document.getElementById('detailName').textContent = dish.name;
             document.getElementById('detailDesc').textContent = dish.description;
-            document.getElementById('detailTags').innerHTML = dish.tags.map(t => `<span class="dish-tag">${t}</span>`).join('');
+            document.getElementById('detailTags').innerHTML = (dish.tags || []).map(t => `<span class="dish-tag">${escapeHtml(t)}</span>`).join('');
             const ingredients = dish.ingredients || [];
             document.getElementById('detailIngredients').innerHTML = ingredients.length
-                ? ingredients.map(i => `<li>${i}</li>`).join('')
+                ? ingredients.map(i => `<li>${escapeHtml(i)}</li>`).join('')
                 : '<li style="color: var(--muted);">暂无食材记录</li>';
             updatePickBtn();
 
@@ -2711,17 +2732,18 @@
         }
 
         // ===== 菜品分组渲染（按分类排版 + 图片） =====
-        function dishRowHTML(dish) {
+        function dishRowHTML(dish, removable) {
             const imgBlock = dish.image
-                ? `<img class="summary-img" src="${dish.image}" alt="${dish.name}">`
-                : `<div class="summary-img summary-img-text">${dish.name.slice(0, 1)}</div>`;
+                ? `<img class="summary-img" src="${escapeHtml(dish.image)}" alt="${escapeHtml(dish.name)}">`
+                : `<div class="summary-img summary-img-text">${escapeHtml(dish.name.slice(0, 1))}</div>`;
             return `
                 <div class="summary-row" data-id="${dish.id}">
                     ${imgBlock}
                     <div class="summary-mid">
-                        <div class="summary-name">${dish.name}</div>
-                        <div class="summary-meta">${dish.category} · ${dish.subCategory || ''}</div>
+                        <div class="summary-name">${escapeHtml(dish.name)}</div>
+                        <div class="summary-meta">${escapeHtml(dish.category)} · ${escapeHtml(dish.subCategory || '')}</div>
                     </div>
+                    ${removable ? `<button class="summary-remove" data-id="${dish.id}" title="移除">✕</button>` : ''}
                 </div>`;
         }
 
@@ -2740,14 +2762,8 @@
                 const dishes = groups[cat];
                 return `
                     <div class="summary-group">
-                        <div class="summary-group-title">${cat}<span class="gcount">${dishes.length} 道</span></div>
-                        ${dishes.map(dish => {
-                            const row = dishRowHTML(dish);
-                            if (removable) {
-                                return row.replace('</div>', `<button class="summary-remove" data-id="${dish.id}" title="移除">✕</button></div>`);
-                            }
-                            return row;
-                        }).join('')}
+                        <div class="summary-group-title">${escapeHtml(cat)}<span class="gcount">${dishes.length} 道</span></div>
+                        ${dishes.map(dish => dishRowHTML(dish, removable)).join('')}
                     </div>`;
             }).join('');
         }
@@ -2760,10 +2776,11 @@
 
             list.querySelectorAll('.summary-remove').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    selectedDishes.delete(parseInt(btn.dataset.id));
+                    const id = parseInt(btn.dataset.id);
+                    selectedDishes.delete(id);
                     renderSummary();
                     updateCart();
-                    renderDishList();
+                    syncDishCardState(id);
                 });
             });
         }
@@ -2795,10 +2812,11 @@
 
             list.querySelectorAll('.summary-remove').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    selectedDishes.delete(parseInt(btn.dataset.id));
+                    const id = parseInt(btn.dataset.id);
+                    selectedDishes.delete(id);
                     renderCartList();
                     updateCart();
-                    renderDishList();
+                    syncDishCardState(id);
                 });
             });
         }
@@ -2840,7 +2858,7 @@
             renderGroupedDishes(document.getElementById('slipDishes'), orderDishIds(order), false);
 
             document.getElementById('slipNotes').innerHTML =
-                `<b>忌口备注</b>${order.restrictions || '无'}${order.wishDishes ? `<br><b>想吃的菜</b>${order.wishDishes}` : ''}`;
+                `<b>忌口备注</b>${escapeHtml(order.restrictions || '无')}${order.wishDishes ? `<br><b>想吃的菜</b>${escapeHtml(order.wishDishes)}` : ''}`;
         }
 
         document.getElementById('cancelBtn').addEventListener('click', () => {
@@ -2860,7 +2878,7 @@
         function addDays(offset) {
             const d = new Date();
             d.setDate(d.getDate() + offset);
-            return d.toISOString().split('T')[0];
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
         }
         document.querySelectorAll('#dateChips .chip').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -3081,27 +3099,27 @@
                     return `
                         <div class="order-card">
                             <div class="order-card-head">
-                                <span class="order-card-id">单号 #${String(order.id).slice(-6)} · ${order.createdAt || ''}</span>
+                                <span class="order-card-id">单号 #${String(order.id).slice(-6)} · ${escapeHtml(order.createdAt || '')}</span>
                                 <div class="order-head-actions">
-                                    <span class="order-status ${done ? 'done' : ''}">${status}</span>
+                                    <span class="order-status ${done ? 'done' : ''}">${escapeHtml(status)}</span>
                                     <button class="order-edit" data-id="${order.id}">编辑</button>
                                 </div>
                             </div>
                             <div class="order-card-meta">
-                                <span>预订人 <b>${order.name}</b></span>
-                                <span>人数 <b>${order.guests} 位</b></span>
-                                <span>时间 <b>${order.date} ${order.time}</b></span>
+                                <span>预订人 <b>${escapeHtml(order.name)}</b></span>
+                                <span>人数 <b>${escapeHtml(order.guests)} 位</b></span>
+                                <span>时间 <b>${escapeHtml(order.date)} ${escapeHtml(order.time)}</b></span>
                                 <span>菜品 <b>${(order.dishes || []).length} 道</b></span>
                             </div>
-                            <div class="order-card-dishes">${dishes}</div>
-                            ${order.restrictions ? `<div class="order-card-notes">备注：${order.restrictions}</div>` : ''}
-                            ${order.wishDishes ? `<div class="order-card-notes wish">想吃的菜：${order.wishDishes}</div>` : ''}
+                            <div class="order-card-dishes">${escapeHtml(dishes)}</div>
+                            ${order.restrictions ? `<div class="order-card-notes">备注：${escapeHtml(order.restrictions)}</div>` : ''}
+                            ${order.wishDishes ? `<div class="order-card-notes wish">想吃的菜：${escapeHtml(order.wishDishes)}</div>` : ''}
                         </div>`;
                 }).join('');
 
                 list.querySelectorAll('.order-edit').forEach(btn => {
                     btn.addEventListener('click', () => {
-                        const order = orders.find(o => o.id === parseInt(btn.dataset.id));
+                        const order = orders.find(o => String(o.id) === btn.dataset.id);
                         if (order) loadOrderForEdit(order);
                     });
                 });
@@ -3197,12 +3215,21 @@
         // ===== 软键盘高度适配：键盘弹出时抬高弹窗，避免遮挡 =====
         if (window.visualViewport) {
             const vv = window.visualViewport;
+            let kbTicking = false;
             const syncKb = () => {
                 const kbH = Math.max(0, window.innerHeight - vv.height);
                 document.documentElement.style.setProperty('--kb-h', kbH + 'px');
             };
-            vv.addEventListener('resize', syncKb);
-            vv.addEventListener('scroll', syncKb);
+            const requestSyncKb = () => {
+                if (kbTicking) return;
+                kbTicking = true;
+                requestAnimationFrame(() => {
+                    syncKb();
+                    kbTicking = false;
+                });
+            };
+            vv.addEventListener('resize', requestSyncKb);
+            vv.addEventListener('scroll', requestSyncKb);
             syncKb();
         }
 
